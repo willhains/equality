@@ -12,7 +12,7 @@ import java.util.*;
 
 /**
  * A utility for implementing near-ideal {@link Object#hashCode()} methods, using a clean, easy-to-read API. Sample:
- *
+ * 
  * <pre>
  * public int hashCode()
  * {
@@ -24,10 +24,10 @@ import java.util.*;
  *         .hashCode();
  * }
  * </pre>
- *
+ * 
  * This implementation uses an adaptation of Bob Jenkins's "lookup3" hash algorithm, with some tweaks for performance in
  * Java.
- *
+ * 
  * @author willhains
  */
 public final class HashCode
@@ -35,12 +35,12 @@ public final class HashCode
 	// Collect a stream of bits for hashing at the end
 	private int[] data = new int[4];
 	private int length = 0;
-
+	
 	private HashCode _with(final int datum)
 	{
 		// Add the new value to the stream of bits
 		data[length++] = datum;
-
+		
 		// Resize the stream of bits as needed
 		if(length >= data.length)
 		{
@@ -50,7 +50,7 @@ public final class HashCode
 		}
 		return this;
 	}
-
+	
 	// @formatter:off
 	public HashCode with(  byte   b) { return _with(b); }
 	public HashCode with(  char   c) { return _with(c); }
@@ -69,21 +69,24 @@ public final class HashCode
 	public HashCode with(double[] d) { return _with(Arrays.hashCode(d)); }
 	public HashCode with(Object[] o) { return _with(Arrays.deepHashCode(o)); }
 	// @formatter:on
-
+	
+	/**
+	 * Computes and returns the hash code.
+	 */
 	@Override
 	@SuppressWarnings("fallthrough")
 	public int hashCode()
 	{
 		int a, b, c;
 		a = b = c = 486187739 + (length << 2) + 92821;
-
+		
 		int i = 0;
 		while(length > 3)
 		{
 			a += data[i];
 			b += data[i + 1];
 			c += data[i + 2];
-
+			
 			// Note: recent JVMs (Sun JDK6) turn pairs of shifts (needed to do a rotate)
 			// into real x86 rotate instructions.
 			// @formatter:off
@@ -94,11 +97,11 @@ public final class HashCode
 			b -= a; b ^= a << 19 | a >>> -19; a += c;
 			c -= b; c ^= b << 4  | b >>> -4;  b += a;
 			// @formatter:on
-
+			
 			length -= 3;
 			i += 3;
 		}
-
+		
 		switch(length)
 		{
 			case 3:
