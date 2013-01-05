@@ -1,6 +1,5 @@
-package com.willhains.slobjects;
+package com.willhains.equality;
 import static org.junit.Assert.*;
-import com.willhains.slobjects.*;
 import org.junit.*;
 
 /**
