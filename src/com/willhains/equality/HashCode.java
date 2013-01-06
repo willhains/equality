@@ -35,20 +35,20 @@ import java.util.*;
 public final class HashCode
 {
 	// Collect a stream of bits for hashing at the end
-	private int[] data = new int[4];
-	private int length = 0;
+	private int[] _data = new int[4];
+	private int _length = 0;
 	
 	private HashCode _with(final int datum)
 	{
 		// Add the new value to the stream of bits
-		data[length++] = datum;
+		_data[_length++] = datum;
 		
 		// Resize the stream of bits as needed
-		if(length >= data.length)
+		if(_length >= _data.length)
 		{
-			final int[] bigger = new int[data.length * 2];
-			System.arraycopy(data, 0, bigger, 0, data.length);
-			data = bigger;
+			final int[] bigger = new int[_data.length * 2];
+			System.arraycopy(_data, 0, bigger, 0, _data.length);
+			_data = bigger;
 		}
 		return this;
 	}
@@ -62,7 +62,7 @@ public final class HashCode
 	public HashCode with(   long l) { return _with((int)l)._with((int)(l >>> 32)); }
 	public HashCode with(  float f) { return _with(Float.floatToIntBits(f)); }
 	public HashCode with( double d) { return with(Double.doubleToLongBits(d)); }
-	public HashCode with( Object o) { return _with(o == null ? 0 : o.hashCode()); }
+	public HashCode with( Object o) { return _with(o == null ? 7 : o.hashCode()); }
 	
 	public HashCode with(boolean[] n) { return _with(Arrays.hashCode(n)); }
 	public HashCode with(   byte[] b) { return _with(Arrays.hashCode(b)); }
@@ -82,15 +82,16 @@ public final class HashCode
 	@SuppressWarnings("fallthrough")
 	public int hashCode()
 	{
+		int length = _length;
 		int a, b, c;
 		a = b = c = 486187739 + (length << 2) + 92821;
 		
 		int i = 0;
 		while(length > 3)
 		{
-			a += data[i];
-			b += data[i + 1];
-			c += data[i + 2];
+			a += _data[i];
+			b += _data[i + 1];
+			c += _data[i + 2];
 			
 			// Note: recent JVMs (Sun JDK6) turn pairs of shifts (needed to do a rotate)
 			// into real x86 rotate instructions.
@@ -110,13 +111,13 @@ public final class HashCode
 		switch(length)
 		{
 			case 3:
-				c += data[i + 2];
+				c += _data[i + 2];
 				// fall through
 			case 2:
-				b += data[i + 1];
+				b += _data[i + 1];
 				// fall through
 			case 1:
-				a += data[i + 0];
+				a += _data[i + 0];
 				// @formatter:off
 				c ^= b; c -= b << 14 | b >>> -14;
 				a ^= c; a -= c << 11 | c >>> -11;
