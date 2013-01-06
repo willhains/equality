@@ -3,6 +3,17 @@
 .classpath
 .project
 classes
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+.settings/
+.loadpath
+.externalToolBuilders/
+*.launch
 
 # Build output
 *.class
