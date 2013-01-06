@@ -59,7 +59,7 @@ public final class Equals<V>
 	private Equals(final V thiss, final Object obj)
 	{
 		// Scenario A: Comparing two different, but potentially equal objects
-		if(thiss != obj && obj != null && getClass().isAssignableFrom(obj.getClass())) that = (V)obj;
+		if(thiss != obj && obj != null && thiss.getClass().isAssignableFrom(obj.getClass())) that = (V)obj;
 		
 		// Scenario B: We can determine equality/inequality immediately and skip comparison of object state
 		else
@@ -81,7 +81,7 @@ public final class Equals<V>
 	 * @param thiss the object where {@link Object#equals(Object)} is being implemented (ALWAYS pass 'this').
 	 * @param obj the object passed into {@link Object#equals(Object)}.
 	 */
-	public <V> Equals<V> compare(final V thiss, final Object obj)
+	public static <V> Equals<V> compare(final V thiss, final Object obj)
 	{
 		assert thiss != null : "You must pass 'this' into the 'thiss' argument (so it should never be null).";
 		return new Equals<V>(thiss, obj);
