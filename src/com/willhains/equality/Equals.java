@@ -10,7 +10,7 @@ import java.util.*;
  * {
  *     Equals eq = Equals.compare(this, obj);
  *     return eq
- *         .and(this.name,        eq.that.name)
+ *         .and(this.name,        eq.that.name)      // <-- eq.that is guaranteed to never be null
  *         .and(this.productCode, eq.that.productCode)
  *         .and(this.colour,      eq.that.colour)
  *         .equals();
@@ -33,6 +33,7 @@ import java.util.*;
  * </pre>
  * 
  * @param <V> the class whose {@link Object#equals(Object)} method is being implemented.
+ * @see HashCode
  * @author willhains
  */
 public final class Equals<V>

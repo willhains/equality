@@ -28,6 +28,7 @@ import java.util.*;
  * This implementation uses an adaptation of Bob Jenkins's "lookup3" hash algorithm, with some tweaks for performance in
  * Java.
  * 
+ * @see Equals
  * @author willhains
  */
 public final class HashCode
