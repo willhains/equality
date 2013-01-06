@@ -67,7 +67,7 @@ public boolean equals(Object obj)
     if(this == obj) return true;
     if(obj == null) return false;
     if(getClass() != obj.getClass()) return false;
-    MyClass2 other = (MyClass2)obj;
+    MyClass other = (MyClass)obj;
     if(color == null)
     {
     	if(other.color != null) return false;
