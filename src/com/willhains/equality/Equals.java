@@ -8,7 +8,7 @@ import java.util.*;
  * <pre>
  * public boolean equals(Object obj)
  * {
- *     Equals eq = Equals.compare(this, obj);
+ *     Equals&lt;MyClass&gt; eq = Equals.compare(this, obj);
  *     return eq
  *         .and(this.name,        eq.that.name)      // <-- eq.that is guaranteed to never be null
  *         .and(this.productCode, eq.that.productCode)
@@ -23,7 +23,7 @@ import java.util.*;
  * <pre>
  * public boolean equals(Object obj)
  * {
- *     Equals eq = Equals.compare(this, obj);
+ *     Equals&lt;MyClass&gt; eq = Equals.compare(this, obj);
  *     return super.equals(obj) && eq                // <-- note the call to super.equals(obj)
  *         .and(this.name,        eq.that.name)
  *         .and(this.productCode, eq.that.productCode)
