@@ -27,6 +27,73 @@ public class EqualsTest extends GeneralContractTest<MyClass>
 		final MyClass o2 = new MyClass();
 		assertTrue(o1.equals(o2));
 	}
+	
+	@Test
+	public void unequalObjects()
+	{
+		final MyClass o1 = new MyClass();
+		final MyClass o2 = new MyClass();
+		o1.d = 123345d;
+		assertFalse(o1.equals(o2));
+		o2.d = o1.d;
+		assertTrue(o1.equals(o2));
+		o2.i = 42;
+		assertFalse(o1.equals(o2));
+	}
+	
+	@Test
+	public void nullFields()
+	{
+		final MyClass o1 = new MyClass();
+		final MyClass o2 = new MyClass();
+		o1.o = null;
+		assertFalse(o1.equals(o2));
+		o2.o = null;
+		assertTrue(o1.equals(o2));
+		o2.ii = null;
+		assertFalse(o1.equals(o2));
+		o1.ii = null;
+		assertTrue(o1.equals(o2));
+	}
+	
+	@Test
+	public void equalToNull()
+	{
+		final MyClass o1 = new MyClass();
+		assertFalse(o1.equals(null));
+	}
+	
+	@Test
+	public void differentTypes()
+	{
+		final MyClass o1 = new MyClass();
+		assertFalse(o1.equals("Hi there"));
+	}
+	
+	static class MySubClass extends MyClass
+	{
+		@SuppressWarnings("unused")
+		private int differentAndUnrelatedInt = 88;
+	}
+	
+	@Test
+	public void equalsSubclass()
+	{
+		final MyClass o1 = new MyClass();
+		final MySubClass o2 = new MySubClass();
+		assertTrue(o1.equals(o2));
+		assertFalse(o2.equals(o1)); // type of o1 is not assignable to type of o2
+		o2.differentAndUnrelatedInt = 11;
+		assertTrue(o1.equals(o2));
+	}
+	
+	@Test(expected = AssertionError.class)
+	public void nullCaller()
+	{
+		final MyClass o1 = null;
+		final MyClass o2 = new MyClass();
+		Equals.compare(o1, o2); // naughty
+	}
 }
 
 class MyClass
