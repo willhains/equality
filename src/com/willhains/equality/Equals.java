@@ -95,22 +95,25 @@ public final class Equals<V>
 	}
 	
 	// @formatter:off
-	public Equals<V> and(  byte   b,   byte   bb) { if(_ok) _and(b == bb); return this; }
-	public Equals<V> and(  char   c,   char   cc) { if(_ok) _and(c == cc); return this; }
-	public Equals<V> and( short   s,  short   ss) { if(_ok) _and(s == ss); return this; }
-	public Equals<V> and(   int   i,    int   ii) { if(_ok) _and(i == ii); return this; }
-	public Equals<V> and(  long   l,   long   ll) { if(_ok) _and(l == ll); return this; }
-	public Equals<V> and( float   f,  float   ff) { if(_ok) _and(f == ff); return this; }
-	public Equals<V> and(double   d, double   dd) { if(_ok) _and(d == dd); return this; }
-	public Equals<V> and(Object   o, Object   oo) { if(_ok) _and(o == null ? oo == null : o.equals(oo)); return this; }
-	public Equals<V> and(  byte[] b,   byte[] bb) { if(_ok) _and(Arrays.equals(b, bb)); return this; }
-	public Equals<V> and(  char[] c,   char[] cc) { if(_ok) _and(Arrays.equals(c, cc)); return this; }
-	public Equals<V> and( short[] s,  short[] ss) { if(_ok) _and(Arrays.equals(s, ss)); return this; }
-	public Equals<V> and(   int[] i,    int[] ii) { if(_ok) _and(Arrays.equals(i, ii)); return this; }
-	public Equals<V> and(  long[] l,   long[] ll) { if(_ok) _and(Arrays.equals(l, ll)); return this; }
-	public Equals<V> and( float[] f,  float[] ff) { if(_ok) _and(Arrays.equals(f, ff)); return this; }
-	public Equals<V> and(double[] d, double[] dd) { if(_ok) _and(Arrays.equals(d, dd)); return this; }
-	public Equals<V> and(Object[] o, Object[] oo) { if(_ok) _and(Arrays.deepEquals(o, oo)); return this; }
+	public Equals<V> and(boolean n, boolean nn) { if(_ok) _and(n == nn); return this; } 
+	public Equals<V> and(   byte b,    byte bb) { if(_ok) _and(b == bb); return this; }
+	public Equals<V> and(   char c,    char cc) { if(_ok) _and(c == cc); return this; }
+	public Equals<V> and(  short s,   short ss) { if(_ok) _and(s == ss); return this; }
+	public Equals<V> and(    int i,     int ii) { if(_ok) _and(i == ii); return this; }
+	public Equals<V> and(   long l,    long ll) { if(_ok) _and(l == ll); return this; }
+	public Equals<V> and(  float f,   float ff) { if(_ok) _and(f == ff); return this; }
+	public Equals<V> and( double d,  double dd) { if(_ok) _and(d == dd); return this; }
+	public Equals<V> and( Object o,  Object oo) { if(_ok) _and(o == null ? oo == null : o.equals(oo)); return this; }
+	
+	public Equals<V> and(boolean[] n, boolean[] nn) { if(_ok) _and(Arrays.equals(n, nn)); return this; }
+	public Equals<V> and(   byte[] b,    byte[] bb) { if(_ok) _and(Arrays.equals(b, bb)); return this; }
+	public Equals<V> and(   char[] c,    char[] cc) { if(_ok) _and(Arrays.equals(c, cc)); return this; }
+	public Equals<V> and(  short[] s,   short[] ss) { if(_ok) _and(Arrays.equals(s, ss)); return this; }
+	public Equals<V> and(    int[] i,     int[] ii) { if(_ok) _and(Arrays.equals(i, ii)); return this; }
+	public Equals<V> and(   long[] l,    long[] ll) { if(_ok) _and(Arrays.equals(l, ll)); return this; }
+	public Equals<V> and(  float[] f,   float[] ff) { if(_ok) _and(Arrays.equals(f, ff)); return this; }
+	public Equals<V> and( double[] d,  double[] dd) { if(_ok) _and(Arrays.equals(d, dd)); return this; }
+	public Equals<V> and( Object[] o,  Object[] oo) { if(_ok) _and(Arrays.deepEquals(o, oo)); return this; }
 	// @formatter:on
 	
 	/**

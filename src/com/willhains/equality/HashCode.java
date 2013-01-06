@@ -52,22 +52,25 @@ public final class HashCode
 	}
 	
 	// @formatter:off
-	public HashCode with(  byte   b) { return _with(b); }
-	public HashCode with(  char   c) { return _with(c); }
-	public HashCode with( short   s) { return _with(s); }
-	public HashCode with(   int   i) { return _with(i); }
-	public HashCode with(  long   l) { return _with((int)l)._with((int)(l >>>32)); }
-	public HashCode with( float   f) { return _with(Float.floatToIntBits(f)); }
-	public HashCode with(double   d) { return with(Double.doubleToLongBits(d)); }
-	public HashCode with(Object   o) { return _with(o == null ? 0 : o.hashCode()); }
-	public HashCode with(  byte[] b) { return _with(Arrays.hashCode(b)); }
-	public HashCode with(  char[] c) { return _with(Arrays.hashCode(c)); }
-	public HashCode with( short[] s) { return _with(Arrays.hashCode(s)); }
-	public HashCode with(   int[] i) { return _with(Arrays.hashCode(i)); }
-	public HashCode with(  long[] l) { return _with(Arrays.hashCode(l)); }
-	public HashCode with( float[] f) { return _with(Arrays.hashCode(f)); }
-	public HashCode with(double[] d) { return _with(Arrays.hashCode(d)); }
-	public HashCode with(Object[] o) { return _with(Arrays.deepHashCode(o)); }
+	public HashCode with(boolean n) { return _with(n ? 31 : 127); }
+	public HashCode with(   byte b) { return _with(b); }
+	public HashCode with(   char c) { return _with(c); }
+	public HashCode with(  short s) { return _with(s); }
+	public HashCode with(    int i) { return _with(i); }
+	public HashCode with(   long l) { return _with((int)l)._with((int)(l >>> 32)); }
+	public HashCode with(  float f) { return _with(Float.floatToIntBits(f)); }
+	public HashCode with( double d) { return with(Double.doubleToLongBits(d)); }
+	public HashCode with( Object o) { return _with(o == null ? 0 : o.hashCode()); }
+	
+	public HashCode with(boolean[] n) { return _with(Arrays.hashCode(n)); }
+	public HashCode with(   byte[] b) { return _with(Arrays.hashCode(b)); }
+	public HashCode with(   char[] c) { return _with(Arrays.hashCode(c)); }
+	public HashCode with(  short[] s) { return _with(Arrays.hashCode(s)); }
+	public HashCode with(    int[] i) { return _with(Arrays.hashCode(i)); }
+	public HashCode with(   long[] l) { return _with(Arrays.hashCode(l)); }
+	public HashCode with(  float[] f) { return _with(Arrays.hashCode(f)); }
+	public HashCode with( double[] d) { return _with(Arrays.hashCode(d)); }
+	public HashCode with( Object[] o) { return _with(Arrays.deepHashCode(o)); }
 	// @formatter:on
 	
 	/**
