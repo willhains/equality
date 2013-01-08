@@ -19,7 +19,7 @@ public boolean equals(Object obj)
 @Override
 public int hashCode()
 {
-    return new HashCode()
+    return HashCode.compute()
         .with(this.name)
         .with(this.productCode)
         .with(this.colour)
