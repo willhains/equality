@@ -95,3 +95,7 @@ public int hashCode()
 ```
 
 With Equality, you write less code, it's more readable, and more maintainable. And there's nothing to memorise — if your IDE supports code completion (and, even better, dynamic display of Javadoc), you will be prompted what to do as you write the code.
+
+## Development status
+
+Equality is under development and is currently in an early alpha state. Public APIs are subject to change without notice.
