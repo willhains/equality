@@ -6,6 +6,6 @@ This package contains some handy abstract JUnit test classes to help with checki
 - `GeneralContractTest` is the one to subclass when you're testing a class that implements `equals()` and `hashCode()`.
 - `ComparableTest` is for testing classes that implement the `Comparable` interface.
 
-## If I'm using Equality to implement my `equals()` and `hashCode()` methods, do I still need to test them?
+## If I'm using Equality, why test my `equals()` and `hashCode()` methods?
 
-Absolutely. Equality gives you a nice, clean API to implement these methods, but if you choose the wrong internal state to compare/hash, your implementation will be pretty but wrong. Need more convincing? Bugs in `equals()` and `hashCode()` have a nasty way of not showing up during normal functional and integration testing, then rearing their ugly head in production. Always test every method you implement, no matter how much help you get from libraries like Equality.
+Equality gives you a nice, clean API to implement these methods, but if you choose the wrong internal state to compare/hash, your implementation will be pretty but wrong. Need more convincing? Bugs in `equals()` and `hashCode()` have a nasty way of not showing up during normal functional and integration testing, then rearing their ugly head in production. Always test every method you implement, no matter how much help you get from libraries like Equality.
