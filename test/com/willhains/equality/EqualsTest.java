@@ -94,6 +94,16 @@ public class EqualsTest extends GeneralContractTest<MyClass>
 		final MyClass o2 = new MyClass();
 		Equals.compare(o1, o2); // naughty
 	}
+	
+	@Test
+	public void directEqualityCondition()
+	{
+		final MyClass o1 = new MyClass();
+		final MyClass o2 = new MyClass();
+		
+		assertTrue(Equals.compare(o1, o2).and(true).equals());
+		assertFalse(Equals.compare(o1, o2).and(false).equals());
+	}
 }
 
 class MyClass
