@@ -7,7 +7,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.willhains.equality;
+package com.willhains.equality.abstracttest;
 
 import static org.junit.Assert.*;
 import org.junit.*;

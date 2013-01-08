@@ -1,6 +1,7 @@
 package com.willhains.equality;
 
 import static org.junit.Assert.*;
+import com.willhains.equality.abstracttest.*;
 import org.junit.*;
 
 /**
