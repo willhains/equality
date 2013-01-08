@@ -52,16 +52,28 @@ public final class Equals<V>
 	 */
 	public final V that;
 	
+	// The object doing the comparison
+	private final V _this;
+	
 	/**
 	 * Initialises the state for the most efficient comparison. There are two possible scenarios:
 	 * (a) we are comparing two different, but potentially equal objects, or
 	 * (b) we can determine equality/inequality immediately.
 	 */
 	@SuppressWarnings("unchecked")
-	private Equals(final V thiss, final Object obj)
+	private Equals(final V thiss, final Object obj, boolean strict)
 	{
+		_this = thiss;
+		
 		// Scenario A: Comparing two different, but potentially equal objects
-		if(thiss != obj && obj != null && thiss.getClass().isAssignableFrom(obj.getClass())) that = (V)obj;
+		if(thiss != obj && obj != null && thiss.getClass().isAssignableFrom(obj.getClass()))
+		{
+			// We will compare against the actual object
+			that = (V)obj;
+			
+			// For stricter comparisons, short-circuit when the classes aren't exactly the same
+			if(strict && obj.getClass() != thiss.getClass()) _eq = _ok = false;
+		}
 		
 		// Scenario B: We can determine equality/inequality immediately and skip comparison of object state
 		else
@@ -78,7 +90,8 @@ public final class Equals<V>
 	}
 	
 	/**
-	 * Initiates a comparison between two objects.
+	 * Initiates a comparison between two objects. This implementation counts objects as equal if the second object is
+	 * an instance of the first object's class.
 	 * 
 	 * @param thiss the object where {@link Object#equals(Object)} is being implemented (ALWAYS pass 'this').
 	 * @param obj the object passed into {@link Object#equals(Object)}.
@@ -86,7 +99,20 @@ public final class Equals<V>
 	public static <V> Equals<V> compare(final V thiss, final Object obj)
 	{
 		assert thiss != null : "You must pass 'this' into the 'thiss' argument (so it should never be null).";
-		return new Equals<V>(thiss, obj);
+		return new Equals<V>(thiss, obj, false);
+	}
+	
+	/**
+	 * Initiates a comparison between two objects. This implementation counts objects as equal only if they are
+	 * instances of exactly the same class.
+	 * 
+	 * @param thiss the object where {@link Object#equals(Object)} is being implemented (ALWAYS pass 'this').
+	 * @param obj the object passed into {@link Object#equals(Object)}.
+	 */
+	public static <V> Equals<V> compareStrictly(final V thiss, final Object obj)
+	{
+		assert thiss != null : "You must pass 'this' into the 'thiss' argument (so it should never be null).";
+		return new Equals<V>(thiss, obj, true);
 	}
 	
 	/**
@@ -126,7 +152,7 @@ public final class Equals<V>
 	// @formatter:on
 	
 	/**
-	 * @return the result of the comparison.
+	 * Returns the result of the comparison.
 	 */
 	public boolean equals()
 	{

@@ -95,6 +95,14 @@ public class EqualsTest extends GeneralContractTest<MyClass>
 		Equals.compare(o1, o2); // naughty
 	}
 	
+	@Test(expected = AssertionError.class)
+	public void nullStrictlyCaller()
+	{
+		final MyClass o1 = null;
+		final MyClass o2 = new MyClass();
+		Equals.compareStrictly(o1, o2); // naughty
+	}
+	
 	@Test
 	public void directEqualityCondition()
 	{
@@ -103,6 +111,19 @@ public class EqualsTest extends GeneralContractTest<MyClass>
 		
 		assertTrue(Equals.compare(o1, o2).and(true).equals());
 		assertFalse(Equals.compare(o1, o2).and(false).equals());
+	}
+	
+	@Test
+	public void compareStrictly()
+	{
+		final MyClass o1 = new MyClass();
+		final MyClass o2 = new MyClass();
+		final MyClass o3 = new MySubClass();
+		
+		assertTrue(Equals.compare(o1, o2).equals());
+		assertTrue(Equals.compare(o1, o3).equals());
+		assertTrue(Equals.compareStrictly(o1, o2).equals());
+		assertFalse(Equals.compareStrictly(o1, o3).equals());
 	}
 }
 
