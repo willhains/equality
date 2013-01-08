@@ -178,7 +178,7 @@ class MyClass
 	@Override
 	public int hashCode()
 	{
-		return new HashCode()
+		return HashCode.compute()
 			.with(this.n)
 			.with(this.b)
 			.with(this.s)

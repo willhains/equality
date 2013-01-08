@@ -17,8 +17,8 @@ import java.util.*;
  * <pre>
  * public int hashCode()
  * {
- *     return new HashCode()
- *         .with(super.hashCode()) // Include super.hashCode() if your superclass implements it meaningfully
+ *     return HashCode.compute()
+ *         .with(super.hashCode()) // <-- Include super.hashCode() if your superclass implements it meaningfully
  *         .with(this.name)
  *         .with(this.productCode)
  *         .with(this.colour)
@@ -37,6 +37,35 @@ public final class HashCode
 	// Collect a stream of bits for hashing at the end
 	private int[] _data = new int[4];
 	private int _length = 0;
+	
+	// Selection of hash algorithm
+	private final _Algorithm _algorithm;
+	
+	private HashCode(_Algorithm algorithm)
+	{
+		_algorithm = algorithm;
+	}
+	
+	/**
+	 * Initiates the computation of a hash code. This implementation is adapted from the recipe described in Effective
+	 * Java by Joshua Bloch, which is a fast, general-purpose hash algorithm. Use this implementation if you're not
+	 * sure, or if your class will be used as the key for relatively small hash maps.
+	 */
+	public static HashCode compute()
+	{
+		return new HashCode(_Algorithm.JOSHUA_BLOCH);
+	}
+	
+	/**
+	 * Initiates the computation of a well-distributed hash code. This implementation is adapted from Bob Jenkins's
+	 * "lookup3" hash algorithm, with some tweaks for performance in Java. Use this implementation if your class will
+	 * be used as the key for a very large hash map. The hash code computation is slower, but should provide faster
+	 * read access on a large hash map.
+	 */
+	public static HashCode computeForLargeSet()
+	{
+		return new HashCode(_Algorithm.LOOKUP3);
+	}
 	
 	private HashCode _with(final int datum)
 	{
@@ -79,56 +108,85 @@ public final class HashCode
 	 * Computes and returns the hash code.
 	 */
 	@Override
-	@SuppressWarnings("fallthrough")
 	public int hashCode()
 	{
-		int length = _length;
-		int a, b, c;
-		a = b = c = 486187739 + (length << 2) + 92821;
-		
-		int i = 0;
-		while(length > 3)
+		return _algorithm.computeHashFromData(_data, _length);
+	}
+	
+	private static enum _Algorithm
+	{
+		JOSHUA_BLOCH
 		{
-			a += _data[i];
-			b += _data[i + 1];
-			c += _data[i + 2];
-			
-			// Note: recent JVMs (Sun JDK6) turn pairs of shifts (needed to do a rotate)
-			// into real x86 rotate instructions.
-			// @formatter:off
-			a -= c; a ^= c << 4  | c >>> -4;  c += b;
-			b -= a; b ^= a << 6  | a >>> -6;  a += c;
-			c -= b; c ^= b << 8  | b >>> -8;  b += a;
-			a -= c; a ^= c << 16 | c >>> -16; c += b;
-			b -= a; b ^= a << 19 | a >>> -19; a += c;
-			c -= b; c ^= b << 4  | b >>> -4;  b += a;
-			// @formatter:on
-			
-			length -= 3;
-			i += 3;
-		}
+			@Override
+			int computeHashFromData(int[] data, int length)
+			{
+				int hash = 17;
+				for(int i = 0; i < length; i++)
+				{
+					final int datum = data[i];
+					hash += 31 * datum;
+				}
+				return hash;
+			}
+		},
 		
-		switch(length)
+		LOOKUP3
 		{
-			case 3:
-				c += _data[i + 2];
-				// fall through
-			case 2:
-				b += _data[i + 1];
-				// fall through
-			case 1:
-				a += _data[i + 0];
-				// @formatter:off
-				c ^= b; c -= b << 14 | b >>> -14;
-				a ^= c; a -= c << 11 | c >>> -11;
-				b ^= a; b -= a << 25 | a >>> -25;
-				c ^= b; c -= b << 16 | b >>> -16;
-				a ^= c; a -= c << 4  | c >>> -4;
-				b ^= a; b -= a << 14 | a >>> -14;
-				c ^= b; c -= b << 24 | b >>> -24;
-				// @formatter:on
-				// fall through
-		}
-		return c;
+			@Override
+			@SuppressWarnings("fallthrough")
+			int computeHashFromData(int[] data, int length)
+			{
+				int len = length;
+				int a, b, c;
+				a = b = c = 486187739 + (len << 2) + 92821;
+				
+				int i = 0;
+				while(len > 3)
+				{
+					a += data[i];
+					b += data[i + 1];
+					c += data[i + 2];
+					
+					// Note: recent JVMs (Sun JDK6) turn pairs of shifts (needed to do a rotate)
+					// into real x86 rotate instructions.
+					// @formatter:off
+					a -= c; a ^= c << 4  | c >>> -4;  c += b;
+					b -= a; b ^= a << 6  | a >>> -6;  a += c;
+					c -= b; c ^= b << 8  | b >>> -8;  b += a;
+					a -= c; a ^= c << 16 | c >>> -16; c += b;
+					b -= a; b ^= a << 19 | a >>> -19; a += c;
+					c -= b; c ^= b << 4  | b >>> -4;  b += a;
+					// @formatter:on
+					
+					len -= 3;
+					i += 3;
+				}
+				
+				switch(len)
+				{
+					case 3:
+						c += data[i + 2];
+						// fall through
+					case 2:
+						b += data[i + 1];
+						// fall through
+					case 1:
+						a += data[i + 0];
+						// @formatter:off
+						c ^= b; c -= b << 14 | b >>> -14;
+						a ^= c; a -= c << 11 | c >>> -11;
+						b ^= a; b -= a << 25 | a >>> -25;
+						c ^= b; c -= b << 16 | b >>> -16;
+						a ^= c; a -= c << 4  | c >>> -4;
+						b ^= a; b -= a << 14 | a >>> -14;
+						c ^= b; c -= b << 24 | b >>> -24;
+						// @formatter:on
+						// fall through
+				}
+				return c;
+			}
+		};
+		
+		abstract int computeHashFromData(int[] data, int length);
 	}
 }
