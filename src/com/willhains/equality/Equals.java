@@ -52,9 +52,6 @@ public final class Equals<V>
 	 */
 	public final V that;
 	
-	// The object doing the comparison
-	private final V _this;
-	
 	/**
 	 * Initialises the state for the most efficient comparison. There are two possible scenarios:
 	 * (a) we are comparing two different, but potentially equal objects, or
@@ -63,8 +60,6 @@ public final class Equals<V>
 	@SuppressWarnings("unchecked")
 	private Equals(final V thiss, final Object obj, boolean strict)
 	{
-		_this = thiss;
-		
 		// Scenario A: Comparing two different, but potentially equal objects
 		if(thiss != obj && obj != null && thiss.getClass().isAssignableFrom(obj.getClass()))
 		{
