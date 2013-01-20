@@ -120,30 +120,30 @@ public final class Equals<V>
 	public Equals<V> and(boolean equalityCondition)
 	{
 		// Updates the state to skip subsequent comparisons once inequality is determined
-		if(!equalityCondition) _eq = _ok = false;
+		if(_ok && !equalityCondition) _eq = _ok = false;
 		return this;
 	}
 	
 	// @formatter:off
-	public Equals<V> and(boolean n, boolean nn) { if(_ok) and(n == nn); return this; } 
-	public Equals<V> and(   byte b,    byte bb) { if(_ok) and(b == bb); return this; }
-	public Equals<V> and(   char c,    char cc) { if(_ok) and(c == cc); return this; }
-	public Equals<V> and(  short s,   short ss) { if(_ok) and(s == ss); return this; }
-	public Equals<V> and(    int i,     int ii) { if(_ok) and(i == ii); return this; }
-	public Equals<V> and(   long l,    long ll) { if(_ok) and(l == ll); return this; }
-	public Equals<V> and(  float f,   float ff) { if(_ok) and(f == ff); return this; }
-	public Equals<V> and( double d,  double dd) { if(_ok) and(d == dd); return this; }
-	public Equals<V> and( Object o,  Object oo) { if(_ok) and(o == null ? oo == null : o.equals(oo)); return this; }
-	
-	public Equals<V> and(boolean[] n, boolean[] nn) { if(_ok) and(Arrays.equals(n, nn)); return this; }
-	public Equals<V> and(   byte[] b,    byte[] bb) { if(_ok) and(Arrays.equals(b, bb)); return this; }
-	public Equals<V> and(   char[] c,    char[] cc) { if(_ok) and(Arrays.equals(c, cc)); return this; }
-	public Equals<V> and(  short[] s,   short[] ss) { if(_ok) and(Arrays.equals(s, ss)); return this; }
-	public Equals<V> and(    int[] i,     int[] ii) { if(_ok) and(Arrays.equals(i, ii)); return this; }
-	public Equals<V> and(   long[] l,    long[] ll) { if(_ok) and(Arrays.equals(l, ll)); return this; }
-	public Equals<V> and(  float[] f,   float[] ff) { if(_ok) and(Arrays.equals(f, ff)); return this; }
-	public Equals<V> and( double[] d,  double[] dd) { if(_ok) and(Arrays.equals(d, dd)); return this; }
-	public Equals<V> and( Object[] o,  Object[] oo) { if(_ok) and(Arrays.deepEquals(o, oo)); return this; }
+	public Equals<V> and(boolean n, boolean nn) { if(_ok) if(n != nn) _eq = _ok = false; return this; } 
+	public Equals<V> and(   byte b,    byte bb) { if(_ok) if(b != bb) _eq = _ok = false; return this; }
+	public Equals<V> and(   char c,    char cc) { if(_ok) if(c != cc) _eq = _ok = false; return this; }
+	public Equals<V> and(  short s,   short ss) { if(_ok) if(s != ss) _eq = _ok = false; return this; }
+	public Equals<V> and(    int i,     int ii) { if(_ok) if(i != ii) _eq = _ok = false; return this; }
+	public Equals<V> and(   long l,    long ll) { if(_ok) if(l != ll) _eq = _ok = false; return this; }
+	public Equals<V> and(  float f,   float ff) { if(_ok) if(f != ff) _eq = _ok = false; return this; }
+	public Equals<V> and( double d,  double dd) { if(_ok) if(d != dd) _eq = _ok = false; return this; }
+	public Equals<V> and( Object o,  Object oo) { if(_ok) if(o == null ? oo != null : !o.equals(oo)) _eq = _ok = false; return this; }
+
+	public Equals<V> and(boolean[] n, boolean[] nn) { if(_ok) if(Arrays.equals(n, nn)) _eq = _ok = false; return this; }
+	public Equals<V> and(   byte[] b,    byte[] bb) { if(_ok) if(Arrays.equals(b, bb)) _eq = _ok = false; return this; }
+	public Equals<V> and(   char[] c,    char[] cc) { if(_ok) if(Arrays.equals(c, cc)) _eq = _ok = false; return this; }
+	public Equals<V> and(  short[] s,   short[] ss) { if(_ok) if(Arrays.equals(s, ss)) _eq = _ok = false; return this; }
+	public Equals<V> and(    int[] i,     int[] ii) { if(_ok) if(Arrays.equals(i, ii)) _eq = _ok = false; return this; }
+	public Equals<V> and(   long[] l,    long[] ll) { if(_ok) if(Arrays.equals(l, ll)) _eq = _ok = false; return this; }
+	public Equals<V> and(  float[] f,   float[] ff) { if(_ok) if(Arrays.equals(f, ff)) _eq = _ok = false; return this; }
+	public Equals<V> and( double[] d,  double[] dd) { if(_ok) if(Arrays.equals(d, dd)) _eq = _ok = false; return this; }
+	public Equals<V> and( Object[] o,  Object[] oo) { if(_ok) if(Arrays.deepEquals(o, oo)) _eq = _ok = false; return this; }
 	// @formatter:on
 	
 	/**

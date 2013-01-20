@@ -17,3 +17,6 @@ tmp/**/*
 
 # Build output
 *.class
+
+# Libraries
+*.jar
