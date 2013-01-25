@@ -26,6 +26,31 @@ public class EqualsBenchmark extends EqualityBenchmark
 		}
 	}
 	
+	private void _printResults(String name, long start, long stop)
+	{
+		final long elapsed = stop - start;
+		final double latency = elapsed / (double)size;
+		System.out.printf("%8s:  Latency=%,-5.3g", name, latency);
+		
+		// Prevent HotSpot from optimising away the loop
+		System.out.println(equals ? " " : "");
+	}
+	
+	@Test
+	public void benchmarkBaselineEquals()
+	{
+		// Timed loop
+		final long start = System.nanoTime();
+		for(int i = 0; i < size; i++)
+		{
+			equals ^= i % 2 == 0;
+		}
+		final long stop = System.nanoTime();
+		
+		// Output results
+		_printResults("Baseline", start, stop);
+	}
+	
 	@Test
 	public void benchmarkEqualityEquals()
 	{
@@ -38,12 +63,7 @@ public class EqualsBenchmark extends EqualityBenchmark
 		final long stop = System.nanoTime();
 		
 		// Output results
-		final long elapsed = stop - start;
-		final double average = elapsed / (double)size;
-		System.out.printf("Equality:  Total=%,.3gms    Average=%,.3gns", elapsed / 1000000d, average);
-		
-		// Prevent HotSpot from optimising away the loop
-		System.out.println(equals ? " " : "");
+		_printResults("Equality", start, stop);
 	}
 	
 	@Test
@@ -58,12 +78,7 @@ public class EqualsBenchmark extends EqualityBenchmark
 		final long stop = System.nanoTime();
 		
 		// Output results
-		final long elapsed = stop - start;
-		final double average = elapsed / (double)size;
-		System.out.printf("Apache:    Total=%,.3gms    Average=%,.3gns", elapsed / 1000000d, average);
-		
-		// Prevent HotSpot from optimising away the loop
-		System.out.println(equals ? " " : "");
+		_printResults("Apache", start, stop);
 	}
 	
 	@Test
@@ -78,11 +93,6 @@ public class EqualsBenchmark extends EqualityBenchmark
 		final long stop = System.nanoTime();
 		
 		// Output results
-		final long elapsed = stop - start;
-		final double average = elapsed / (double)size;
-		System.out.printf("Eclipse:   Total=%,.3gms    Average=%,.3gns", elapsed / 1000000d, average);
-		
-		// Prevent HotSpot from optimising away the loop
-		System.out.println(equals ? " " : "");
+		_printResults("Eclipse", start, stop);
 	}
 }
