@@ -30,34 +30,34 @@ public abstract class EqualityBenchmark
 		{
 			System.out.println("Generating test data");
 			parameters = new Object[REPETITIONS][2];
+			
+			// Create a set of POJOs
+			System.out.println("  POJOs...");
+			final SomewhatTypicalPOJO[] pojos = new SomewhatTypicalPOJO[SIZE];
+			for(int p = 0; p < SIZE; p++)
+			{
+				pojos[p] = new SomewhatTypicalPOJO();
+			}
+			
+			// Create a set of possibly-equal Objects
+			System.out.println("  Objects...");
+			final Object[] objects = new Object[SIZE];
+			for(int o = 0; o < SIZE; o++)
+			{
+				objects[o] =
+					o % 7 == 0 ? pojos[o] :
+						o % 13 == 0 ? null :
+							o % 19 == 0 ? "String" :
+								new SomewhatTypicalPOJO();
+			}
+			
+			// Load up for parameterised tests
 			for(int r = 0; r < REPETITIONS; r++)
 			{
-				System.out.printf("%4d:  ", r + 1);
-				
-				// Create a set of POJOs
-				System.out.print("POJOs...  ");
-				final SomewhatTypicalPOJO[] pojos = new SomewhatTypicalPOJO[SIZE];
-				for(int p = 0; p < SIZE; p++)
-				{
-					pojos[p] = new SomewhatTypicalPOJO();
-				}
 				parameters[r][0] = pojos;
-				
-				// Create a set of possibly-equal Objects
-				System.out.print("Objects...  ");
-				final Object[] objects = new Object[SIZE];
-				for(int o = 0; o < SIZE; o++)
-				{
-					objects[o] =
-						o % 7 == 0 ? pojos[o] :
-							o % 13 == 0 ? null :
-								o % 19 == 0 ? "String" :
-									new SomewhatTypicalPOJO();
-				}
-				parameters[r][1] = objects;
-				
-				System.out.println("DONE");
+				parameters[r][1] = objects;				
 			}
+			System.out.println("DONE");
 		}
 		return Arrays.asList(parameters);
 	}
