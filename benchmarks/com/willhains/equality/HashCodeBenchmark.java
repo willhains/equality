@@ -10,24 +10,29 @@ import org.junit.*;
  */
 public class HashCodeBenchmark extends EqualityBenchmark
 {
+	public HashCodeBenchmark(SomewhatTypicalPOJO[] pojos, Object[] objects)
+	{
+		super(pojos, objects);
+	}
+	
 	int[] hashCodes;
 	
 	@Before
 	public void setUpHashCodes()
 	{
-		hashCodes = new int[size];
+		hashCodes = new int[SIZE];
 	}
 	
 	private int _countCollisions()
 	{
 		final Map<Integer, SomewhatTypicalPOJO> hashes = new HashMap<Integer, SomewhatTypicalPOJO>();
 		int collisions = 0;
-		for(int i = 0; i < size; i++)
+		for(int i = 0; i < SIZE; i++)
 		{
 			// Possible collision found
 			if(hashes.containsKey(hashCodes[i]))
 			{
-				final SomewhatTypicalPOJO collider = pojos[i];
+				final SomewhatTypicalPOJO collider = _pojos[i];
 				final Object collidedWith = hashes.get(i);
 				
 				// Actual collision
@@ -43,7 +48,7 @@ public class HashCodeBenchmark extends EqualityBenchmark
 	{
 		final long bucketSize = ((long)Integer.MAX_VALUE - (long)Integer.MIN_VALUE) / NUM_BUCKETS + 1L;
 		final int[] histogram = new int[NUM_BUCKETS];
-		for(int i = 0; i < size; i++)
+		for(int i = 0; i < SIZE; i++)
 		{
 			final long bucket = ((long)hashCodes[i] - (long)Integer.MIN_VALUE) / bucketSize;
 			histogram[(int)bucket]++;
@@ -56,8 +61,8 @@ public class HashCodeBenchmark extends EqualityBenchmark
 		final int collisions = _countCollisions();
 		final int[] histogram = _hashDistribution();
 		final long elapsed = stop - start;
-		final double latency = elapsed / (double)size;
-		final double percentage = collisions * 100 / (double)size;
+		final double latency = elapsed / (double)SIZE;
+		final double percentage = collisions * 100 / (double)SIZE;
 		int min = Integer.MAX_VALUE, max = 0;
 		for(final int element : histogram)
 		{
@@ -75,7 +80,7 @@ public class HashCodeBenchmark extends EqualityBenchmark
 	{
 		// Timed loop
 		final long start = System.nanoTime();
-		for(int i = 0; i < size; i++)
+		for(int i = 0; i < SIZE; i++)
 		{
 			hashCodes[i] = i;
 		}
@@ -90,9 +95,9 @@ public class HashCodeBenchmark extends EqualityBenchmark
 	{
 		// Timed loop
 		final long start = System.nanoTime();
-		for(int i = 0; i < size; i++)
+		for(int i = 0; i < SIZE; i++)
 		{
-			hashCodes[i] = pojos[i].equalityHashCode();
+			hashCodes[i] = _pojos[i].equalityHashCode();
 		}
 		final long stop = System.nanoTime();
 		
@@ -105,9 +110,9 @@ public class HashCodeBenchmark extends EqualityBenchmark
 	{
 		// Timed loop
 		final long start = System.nanoTime();
-		for(int i = 0; i < size; i++)
+		for(int i = 0; i < SIZE; i++)
 		{
-			hashCodes[i] = pojos[i].equalityLargeSetHashCode();
+			hashCodes[i] = _pojos[i].equalityLargeSetHashCode();
 		}
 		final long stop = System.nanoTime();
 		
@@ -120,9 +125,9 @@ public class HashCodeBenchmark extends EqualityBenchmark
 	{
 		// Timed loop
 		final long start = System.nanoTime();
-		for(int i = 0; i < size; i++)
+		for(int i = 0; i < SIZE; i++)
 		{
-			hashCodes[i] = pojos[i].apacheHashCode();
+			hashCodes[i] = _pojos[i].apacheHashCode();
 		}
 		final long stop = System.nanoTime();
 		
@@ -135,9 +140,9 @@ public class HashCodeBenchmark extends EqualityBenchmark
 	{
 		// Timed loop
 		final long start = System.nanoTime();
-		for(int i = 0; i < size; i++)
+		for(int i = 0; i < SIZE; i++)
 		{
-			hashCodes[i] = pojos[i].eclipseHashCode();
+			hashCodes[i] = _pojos[i].eclipseHashCode();
 		}
 		final long stop = System.nanoTime();
 		

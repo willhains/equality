@@ -9,27 +9,23 @@ import org.junit.*;
  */
 public class EqualsBenchmark extends EqualityBenchmark
 {
+	public EqualsBenchmark(SomewhatTypicalPOJO[] pojos, Object[] objects)
+	{
+		super(pojos, objects);
+	}
+	
 	boolean equals;
 	
 	@Before
 	public void setUpEquals()
 	{
 		equals = true;
-		objects = new Object[size];
-		for(int i = 0; i < size; i++)
-		{
-			objects[i] =
-				i % 7 == 0 ? pojos[i] :
-					i % 13 == 0 ? null :
-						i % 19 == 0 ? "String" :
-							new SomewhatTypicalPOJO();
-		}
 	}
 	
 	private void _printResults(String name, long start, long stop)
 	{
 		final long elapsed = stop - start;
-		final double latency = elapsed / (double)size;
+		final double latency = elapsed / (double)SIZE;
 		System.out.printf("%8s:  Latency=%,-5.3g", name, latency);
 		
 		// Prevent HotSpot from optimising away the loop
@@ -37,28 +33,13 @@ public class EqualsBenchmark extends EqualityBenchmark
 	}
 	
 	@Test
-	public void benchmarkBaselineEquals()
-	{
-		// Timed loop
-		final long start = System.nanoTime();
-		for(int i = 0; i < size; i++)
-		{
-			equals ^= i % 2 == 0;
-		}
-		final long stop = System.nanoTime();
-		
-		// Output results
-		_printResults("Baseline", start, stop);
-	}
-	
-	@Test
 	public void benchmarkEqualityEquals()
 	{
 		// Timed loop
 		final long start = System.nanoTime();
-		for(int i = 0; i < size; i++)
+		for(int i = 0; i < SIZE; i++)
 		{
-			equals ^= pojos[i].equalityEquals(objects[i]);
+			equals ^= _pojos[i].equalityEquals(_objects[i]);
 		}
 		final long stop = System.nanoTime();
 		
@@ -71,9 +52,9 @@ public class EqualsBenchmark extends EqualityBenchmark
 	{
 		// Timed loop
 		final long start = System.nanoTime();
-		for(int i = 0; i < size; i++)
+		for(int i = 0; i < SIZE; i++)
 		{
-			equals ^= pojos[i].apacheEquals(objects[i]);
+			equals ^= _pojos[i].apacheEquals(_objects[i]);
 		}
 		final long stop = System.nanoTime();
 		
@@ -86,9 +67,9 @@ public class EqualsBenchmark extends EqualityBenchmark
 	{
 		// Timed loop
 		final long start = System.nanoTime();
-		for(int i = 0; i < size; i++)
+		for(int i = 0; i < SIZE; i++)
 		{
-			equals ^= pojos[i].eclipseEquals(objects[i]);
+			equals ^= _pojos[i].eclipseEquals(_objects[i]);
 		}
 		final long stop = System.nanoTime();
 		
