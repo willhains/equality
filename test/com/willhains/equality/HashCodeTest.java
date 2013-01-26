@@ -12,7 +12,6 @@ public class HashCodeTest
 	public void testHash()
 	{
 		_testHash(HashCode.compute());
-		_testHash(HashCode.computeForLargeSet());
 	}
 	
 	private void _testHash(final HashCode hash)
@@ -24,7 +23,6 @@ public class HashCodeTest
 	public void testComplexHash()
 	{
 		_testComplexHash(HashCode.compute());
-		_testComplexHash(HashCode.computeForLargeSet());
 	}
 	
 	private void _testComplexHash(final HashCode hash)
@@ -55,7 +53,6 @@ public class HashCodeTest
 	public void testDifferent()
 	{
 		_testDifferent(HashCode.compute(), HashCode.compute());
-		_testDifferent(HashCode.computeForLargeSet(), HashCode.computeForLargeSet());
 	}
 	
 	private void _testDifferent(final HashCode hash1, final HashCode hash2)
@@ -67,7 +64,6 @@ public class HashCodeTest
 	public void repeatable()
 	{
 		_repeatable(HashCode.compute(), HashCode.compute());
-		_repeatable(HashCode.computeForLargeSet(), HashCode.computeForLargeSet());
 	}
 	
 	private void _repeatable(final HashCode hash1, final HashCode hash2)
@@ -81,7 +77,6 @@ public class HashCodeTest
 	public void nulls()
 	{
 		_nulls(HashCode.compute());
-		_nulls(HashCode.computeForLargeSet());
 	}
 	
 	private void _nulls(final HashCode hash)

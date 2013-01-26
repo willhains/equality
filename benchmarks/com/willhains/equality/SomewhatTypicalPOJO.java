@@ -108,21 +108,6 @@ public final class SomewhatTypicalPOJO
 	}
 	
 	/**
-	 * An {@link Object#hashCode()} implementation using Equality's {@link HashCode#computeForLargeSet()}
-	 * implementation.
-	 */
-	public int equalityLargeSetHashCode()
-	{
-		return HashCode.computeForLargeSet()
-			.with(this._long)
-			.with(this._string1)
-			.with(this._string2)
-			.with(this._enum)
-			.with(this._decimal)
-			.hashCode();
-	}
-	
-	/**
 	 * An {@link Object#hashCode()} implementation using the {@link HashCodeBuilder} class from Apache Commons.
 	 */
 	public int apacheHashCode()

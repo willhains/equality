@@ -76,21 +76,6 @@ public class HashCodeBenchmark extends EqualityBenchmark
 	}
 	
 	@Test
-	public void benchmarkBaselineHashCode()
-	{
-		// Timed loop
-		final long start = System.nanoTime();
-		for(int i = 0; i < SIZE; i++)
-		{
-			hashCodes[i] = i;
-		}
-		final long stop = System.nanoTime();
-		
-		// Output results
-		_printResults("Baseline", start, stop);
-	}
-	
-	@Test
 	public void benchmarkEqualityHashCode()
 	{
 		// Timed loop
@@ -103,21 +88,6 @@ public class HashCodeBenchmark extends EqualityBenchmark
 		
 		// Output results
 		_printResults("Equality", start, stop);
-	}
-	
-	@Test
-	public void benchmarkEqualityLargeSetHashCode()
-	{
-		// Timed loop
-		final long start = System.nanoTime();
-		for(int i = 0; i < SIZE; i++)
-		{
-			hashCodes[i] = _pojos[i].equalityLargeSetHashCode();
-		}
-		final long stop = System.nanoTime();
-		
-		// Output results
-		_printResults("...Large", start, stop);
 	}
 	
 	@Test

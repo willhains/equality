@@ -1,12 +1,3 @@
-/*
- * Significant portions of this file were adapted from
- * http://people.apache.org/~yonik/code/hash/Hash.java
- * which is distributed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
-
 package com.willhains.equality;
 
 import java.util.*;
@@ -26,167 +17,58 @@ import java.util.*;
  * }
  * </pre>
  * 
- * This implementation uses an adaptation of Bob Jenkins's "lookup3" hash algorithm, with some tweaks for performance in
- * Java.
+ * This implementation is adapted from the recipe described in Effective
+ * Java by Joshua Bloch, which is a fast, general-purpose hash algorithm. Use this implementation if you're not
+ * sure, or if your class will be used as the key for relatively small hash maps.
  * 
  * @see Equals
  * @author willhains
  */
 public final class HashCode
 {
-	// Collect a stream of bits for hashing at the end
-	private int[] _data = new int[4];
-	private int _length = 0;
+	// Hash code result
+	private int _hashCode = 17;
 	
-	// Selection of hash algorithm
-	private final _Algorithm _algorithm;
-	
-	private HashCode(_Algorithm algorithm)
+	private HashCode()
 	{
-		_algorithm = algorithm;
+		// Use static factory methods
 	}
 	
 	/**
-	 * Initiates the computation of a hash code. This implementation is adapted from the recipe described in Effective
-	 * Java by Joshua Bloch, which is a fast, general-purpose hash algorithm. Use this implementation if you're not
-	 * sure, or if your class will be used as the key for relatively small hash maps.
+	 * Initiates the computation of a hash code.
 	 */
 	public static HashCode compute()
 	{
-		return new HashCode(_Algorithm.JOSHUA_BLOCH);
-	}
-	
-	/**
-	 * Initiates the computation of a well-distributed hash code. This implementation is adapted from Bob Jenkins's
-	 * "lookup3" hash algorithm, with some tweaks for performance in Java. Use this implementation if your class will
-	 * be used as the key for a very large hash map. The hash code computation is slower, but should provide faster
-	 * read access on a large hash map.
-	 */
-	public static HashCode computeForLargeSet()
-	{
-		return new HashCode(_Algorithm.LOOKUP3);
-	}
-	
-	private HashCode _with(final int datum)
-	{
-		// Add the new value to the stream of bits
-		_data[_length++] = datum;
-		
-		// Resize the stream of bits as needed
-		if(_length >= _data.length)
-		{
-			final int[] bigger = new int[_data.length * 2];
-			System.arraycopy(_data, 0, bigger, 0, _data.length);
-			_data = bigger;
-		}
-		return this;
+		return new HashCode();
 	}
 	
 	// @formatter:off
-	public HashCode with(boolean n) { return _with(n ? 31 : 127); }
-	public HashCode with(   byte b) { return _with(b); }
-	public HashCode with(   char c) { return _with(c); }
-	public HashCode with(  short s) { return _with(s); }
-	public HashCode with(    int i) { return _with(i); }
-	public HashCode with(   long l) { return _with((int)l)._with((int)(l >>> 32)); }
-	public HashCode with(  float f) { return _with(Float.floatToIntBits(f)); }
-	public HashCode with( double d) { return with(Double.doubleToLongBits(d)); }
-	public HashCode with( Object o) { return _with(o == null ? 7 : o.hashCode()); }
-	
-	public HashCode with(boolean[] n) { return _with(Arrays.hashCode(n)); }
-	public HashCode with(   byte[] b) { return _with(Arrays.hashCode(b)); }
-	public HashCode with(   char[] c) { return _with(Arrays.hashCode(c)); }
-	public HashCode with(  short[] s) { return _with(Arrays.hashCode(s)); }
-	public HashCode with(    int[] i) { return _with(Arrays.hashCode(i)); }
-	public HashCode with(   long[] l) { return _with(Arrays.hashCode(l)); }
-	public HashCode with(  float[] f) { return _with(Arrays.hashCode(f)); }
-	public HashCode with( double[] d) { return _with(Arrays.hashCode(d)); }
-	public HashCode with( Object[] o) { return _with(Arrays.deepHashCode(o)); }
+	public HashCode with(boolean   n) { _hashCode = 31 * _hashCode + (n ? 31 : 127);                 return this; }
+	public HashCode with(   byte   b) { _hashCode = 31 * _hashCode + b;                              return this; }
+	public HashCode with(   char   c) { _hashCode = 31 * _hashCode + c;                              return this; }
+	public HashCode with(  short   s) { _hashCode = 31 * _hashCode + s;                              return this; }
+	public HashCode with(    int   i) { _hashCode = 31 * _hashCode + i;                              return this; }
+	public HashCode with(  float   f) { _hashCode = 31 * _hashCode + Float.floatToIntBits(f);        return this; }
+	public HashCode with(   long   l) { _hashCode = 31 * _hashCode + (int)(l ^ l >>> 32);            return this; }
+	public HashCode with( double   d) { return with(Double.doubleToLongBits(d));                                  }
+	public HashCode with( Object   o) { _hashCode = 31 * _hashCode + (o == null ? 0 : o.hashCode()); return this; }
+	public HashCode with(boolean[] n) { _hashCode = 31 * _hashCode + Arrays.hashCode(n);             return this; }
+	public HashCode with(   byte[] b) { _hashCode = 31 * _hashCode + Arrays.hashCode(b);             return this; }
+	public HashCode with(   char[] c) { _hashCode = 31 * _hashCode + Arrays.hashCode(c);             return this; }
+	public HashCode with(  short[] s) { _hashCode = 31 * _hashCode + Arrays.hashCode(s);             return this; }
+	public HashCode with(    int[] i) { _hashCode = 31 * _hashCode + Arrays.hashCode(i);             return this; }
+	public HashCode with(  float[] f) { _hashCode = 31 * _hashCode + Arrays.hashCode(f);             return this; }
+	public HashCode with(   long[] l) { _hashCode = 31 * _hashCode + Arrays.hashCode(l);             return this; }
+	public HashCode with( double[] d) { _hashCode = 31 * _hashCode + Arrays.hashCode(d);             return this; }
+	public HashCode with( Object[] o) { _hashCode = 31 * _hashCode + Arrays.deepHashCode(o);         return this; }
 	// @formatter:on
 	
 	/**
-	 * Computes and returns the hash code.
+	 * @return the computed hash code.
 	 */
 	@Override
 	public int hashCode()
 	{
-		return _algorithm.computeHashFromData(_data, _length);
-	}
-	
-	private static enum _Algorithm
-	{
-		JOSHUA_BLOCH
-		{
-			@Override
-			int computeHashFromData(int[] data, int length)
-			{
-				int hash = 17;
-				for(int i = 0; i < length; i++)
-				{
-					final int datum = data[i];
-					hash += 31 * datum;
-				}
-				return hash;
-			}
-		},
-		
-		LOOKUP3
-		{
-			@Override
-			@SuppressWarnings("fallthrough")
-			int computeHashFromData(int[] data, int length)
-			{
-				int len = length;
-				int a, b, c;
-				a = b = c = 486187739 + (len << 2) + 92821;
-				
-				int i = 0;
-				while(len > 3)
-				{
-					a += data[i];
-					b += data[i + 1];
-					c += data[i + 2];
-					
-					// Note: recent JVMs (Sun JDK6) turn pairs of shifts (needed to do a rotate)
-					// into real x86 rotate instructions.
-					// @formatter:off
-					a -= c; a ^= c << 4  | c >>> -4;  c += b;
-					b -= a; b ^= a << 6  | a >>> -6;  a += c;
-					c -= b; c ^= b << 8  | b >>> -8;  b += a;
-					a -= c; a ^= c << 16 | c >>> -16; c += b;
-					b -= a; b ^= a << 19 | a >>> -19; a += c;
-					c -= b; c ^= b << 4  | b >>> -4;  b += a;
-					// @formatter:on
-					
-					len -= 3;
-					i += 3;
-				}
-				
-				switch(len)
-				{
-					case 3:
-						c += data[i + 2];
-						// fall through
-					case 2:
-						b += data[i + 1];
-						// fall through
-					case 1:
-						a += data[i + 0];
-						// @formatter:off
-						c ^= b; c -= b << 14 | b >>> -14;
-						a ^= c; a -= c << 11 | c >>> -11;
-						b ^= a; b -= a << 25 | a >>> -25;
-						c ^= b; c -= b << 16 | b >>> -16;
-						a ^= c; a -= c << 4  | c >>> -4;
-						b ^= a; b -= a << 14 | a >>> -14;
-						c ^= b; c -= b << 24 | b >>> -24;
-						// @formatter:on
-						// fall through
-				}
-				return c;
-			}
-		};
-		
-		abstract int computeHashFromData(int[] data, int length);
+		return _hashCode;
 	}
 }
