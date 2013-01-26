@@ -32,7 +32,7 @@ public abstract class EqualityBenchmark
 			parameters = new Object[REPETITIONS][2];
 			for(int r = 0; r < REPETITIONS; r++)
 			{
-				System.out.printf("  %2d:  ", r + 1);
+				System.out.printf("%4d:  ", r + 1);
 				
 				// Create a set of POJOs
 				System.out.print("POJOs...  ");

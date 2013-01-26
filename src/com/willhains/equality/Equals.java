@@ -125,25 +125,24 @@ public final class Equals<V>
 	}
 	
 	// @formatter:off
-	public Equals<V> and(boolean n, boolean nn) { if(_ok) if(n != nn) _eq = _ok = false; return this; } 
-	public Equals<V> and(   byte b,    byte bb) { if(_ok) if(b != bb) _eq = _ok = false; return this; }
-	public Equals<V> and(   char c,    char cc) { if(_ok) if(c != cc) _eq = _ok = false; return this; }
-	public Equals<V> and(  short s,   short ss) { if(_ok) if(s != ss) _eq = _ok = false; return this; }
-	public Equals<V> and(    int i,     int ii) { if(_ok) if(i != ii) _eq = _ok = false; return this; }
-	public Equals<V> and(   long l,    long ll) { if(_ok) if(l != ll) _eq = _ok = false; return this; }
-	public Equals<V> and(  float f,   float ff) { if(_ok) if(f != ff) _eq = _ok = false; return this; }
-	public Equals<V> and( double d,  double dd) { if(_ok) if(d != dd) _eq = _ok = false; return this; }
-	public Equals<V> and( Object o,  Object oo) { if(_ok) if(o == null ? oo != null : !o.equals(oo)) _eq = _ok = false; return this; }
-
-	public Equals<V> and(boolean[] n, boolean[] nn) { if(_ok) if(Arrays.equals(n, nn)) _eq = _ok = false; return this; }
-	public Equals<V> and(   byte[] b,    byte[] bb) { if(_ok) if(Arrays.equals(b, bb)) _eq = _ok = false; return this; }
-	public Equals<V> and(   char[] c,    char[] cc) { if(_ok) if(Arrays.equals(c, cc)) _eq = _ok = false; return this; }
-	public Equals<V> and(  short[] s,   short[] ss) { if(_ok) if(Arrays.equals(s, ss)) _eq = _ok = false; return this; }
-	public Equals<V> and(    int[] i,     int[] ii) { if(_ok) if(Arrays.equals(i, ii)) _eq = _ok = false; return this; }
-	public Equals<V> and(   long[] l,    long[] ll) { if(_ok) if(Arrays.equals(l, ll)) _eq = _ok = false; return this; }
-	public Equals<V> and(  float[] f,   float[] ff) { if(_ok) if(Arrays.equals(f, ff)) _eq = _ok = false; return this; }
-	public Equals<V> and( double[] d,  double[] dd) { if(_ok) if(Arrays.equals(d, dd)) _eq = _ok = false; return this; }
-	public Equals<V> and( Object[] o,  Object[] oo) { if(_ok) if(Arrays.deepEquals(o, oo)) _eq = _ok = false; return this; }
+	public Equals<V> and(boolean   n, boolean   nn) { if(_ok) if(n != nn) _eq = _ok = false; return this; } 
+	public Equals<V> and(   byte   b,    byte   bb) { if(_ok) if(b != bb) _eq = _ok = false; return this; }
+	public Equals<V> and(   char   c,    char   cc) { if(_ok) if(c != cc) _eq = _ok = false; return this; }
+	public Equals<V> and(  short   s,   short   ss) { if(_ok) if(s != ss) _eq = _ok = false; return this; }
+	public Equals<V> and(    int   i,     int   ii) { if(_ok) if(i != ii) _eq = _ok = false; return this; }
+	public Equals<V> and(   long   l,    long   ll) { if(_ok) if(l != ll) _eq = _ok = false; return this; }
+	public Equals<V> and(  float   f,   float   ff) { if(_ok) if(f != ff) _eq = _ok = false; return this; }
+	public Equals<V> and( double   d,  double   dd) { if(_ok) if(d != dd) _eq = _ok = false; return this; }
+	public Equals<V> and( Object   o,  Object   oo) { if(_ok) if(o == null ? oo != null : !o.equals(oo)) _eq = _ok = false; return this; }
+	public Equals<V> and(boolean[] n, boolean[] nn) { if(_ok) if(!Arrays.equals(n, nn)) _eq = _ok = false; return this; }
+	public Equals<V> and(   byte[] b,    byte[] bb) { if(_ok) if(!Arrays.equals(b, bb)) _eq = _ok = false; return this; }
+	public Equals<V> and(   char[] c,    char[] cc) { if(_ok) if(!Arrays.equals(c, cc)) _eq = _ok = false; return this; }
+	public Equals<V> and(  short[] s,   short[] ss) { if(_ok) if(!Arrays.equals(s, ss)) _eq = _ok = false; return this; }
+	public Equals<V> and(    int[] i,     int[] ii) { if(_ok) if(!Arrays.equals(i, ii)) _eq = _ok = false; return this; }
+	public Equals<V> and(   long[] l,    long[] ll) { if(_ok) if(!Arrays.equals(l, ll)) _eq = _ok = false; return this; }
+	public Equals<V> and(  float[] f,   float[] ff) { if(_ok) if(!Arrays.equals(f, ff)) _eq = _ok = false; return this; }
+	public Equals<V> and( double[] d,  double[] dd) { if(_ok) if(!Arrays.equals(d, dd)) _eq = _ok = false; return this; }
+	public Equals<V> and( Object[] o,  Object[] oo) { if(_ok) if(!Arrays.deepEquals(o, oo)) _eq = _ok = false; return this; }
 	// @formatter:on
 	
 	/**
