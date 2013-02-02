@@ -10,9 +10,9 @@ import org.junit.*;
  */
 public class HashCodeBenchmark extends EqualityBenchmark
 {
-	public HashCodeBenchmark(SomewhatTypicalPOJO[] pojos, Object[] objects)
+	public HashCodeBenchmark(int roundNumber, SomewhatTypicalPOJO[] pojos, Object[] objects)
 	{
-		super(pojos, objects);
+		super("hashCode", roundNumber, pojos, objects);
 	}
 	
 	int[] hashCodes;
@@ -73,6 +73,9 @@ public class HashCodeBenchmark extends EqualityBenchmark
 		System.out.printf(
 			"%8s:  Latency=%,-5.3g  Range=%,-5d  Collisions=%,-2d (%.3g%%)%n",
 			name, latency, range, collisions, percentage);
+		
+		// Add results to report
+		addLatencyResult(name, latency);
 	}
 	
 	@Test

@@ -1,5 +1,8 @@
 package com.willhains.equality;
 
+import java.io.*;
+import java.net.*;
+import java.text.*;
 import java.util.*;
 import org.junit.*;
 import org.junit.runner.*;
@@ -14,10 +17,10 @@ import org.junit.runners.*;
 public abstract class EqualityBenchmark
 {
 	// Number of iterations per test
-	protected static final int SIZE = 1 * 1000 * 1000;
+	protected static final int SIZE = 1000;
 	
 	// Run benchmark 10 times to see the effect of HotSpot
-	private static final int REPETITIONS = 10;
+	private static final int REPETITIONS = 10000;
 	
 	// Generated test data shared across all subclasses
 	private static Object[][] parameters;
@@ -29,7 +32,7 @@ public abstract class EqualityBenchmark
 		if(parameters == null)
 		{
 			System.out.println("Generating test data");
-			parameters = new Object[REPETITIONS][2];
+			parameters = new Object[REPETITIONS][3];
 			
 			// Create a set of POJOs
 			System.out.println("  POJOs...");
@@ -54,20 +57,25 @@ public abstract class EqualityBenchmark
 			// Load up for parameterised tests
 			for(int r = 0; r < REPETITIONS; r++)
 			{
-				parameters[r][0] = pojos;
-				parameters[r][1] = objects;				
+				parameters[r][0] = r;
+				parameters[r][1] = pojos;
+				parameters[r][2] = objects;
 			}
 			System.out.println("DONE");
 		}
 		return Arrays.asList(parameters);
 	}
 	
+	private static String _method;
+	private final int _roundNumber;
 	protected final SomewhatTypicalPOJO[] _pojos;
 	protected final Object[] _objects;
 	
-	public EqualityBenchmark(SomewhatTypicalPOJO[] pojos, Object[] objects)
+	public EqualityBenchmark(String method, int roundNumber, SomewhatTypicalPOJO[] pojos, Object[] objects)
 	{
 		super();
+		_method = method;
+		_roundNumber = roundNumber;
 		_pojos = pojos;
 		_objects = objects;
 	}
@@ -77,6 +85,70 @@ public abstract class EqualityBenchmark
 	{
 		// Reset JVM heap before each test
 		System.gc();
-		Thread.sleep(1000);
+		Thread.sleep(1);
+	}
+	
+	// Latency results
+	private static final List<Map<String, Double>> latencyResults = new ArrayList<Map<String, Double>>();
+	
+	/**
+	 * Add a result to the HTML report generated at the end of the test.
+	 */
+	protected final void addLatencyResult(String library, double latency)
+	{
+		final Map<String, Double> resultsForRound;
+		if(latencyResults.size() > _roundNumber) resultsForRound = latencyResults.get(_roundNumber);
+		else latencyResults.add(resultsForRound = new HashMap<String, Double>());
+		resultsForRound.put(library, latency);
+	}
+	
+	@AfterClass
+	public static void generateLatencyReport() throws IOException
+	{
+		final String timestamp = new SimpleDateFormat("yyyy-MM-dd..HH.mm").format(new Date());
+		final PrintStream report = new PrintStream("benchmark-" + _method + "-" + timestamp + ".html", "UTF-8");
+		
+		report.println("<html><head><title>Equality Benchmark Results</title></head><body>");
+		final String hostName = InetAddress.getLocalHost().getHostName();
+		report.println("<h1>Equality Benchmark Results &mdash; " + hostName + ", " + timestamp + "</h1>");
+		report.println("<h2>Comparative latency of <code>" + _method + "()</code></h2>");
+		report.println("<div id='" + _method + "-chart'></div>");
+		report.println("<script type='text/javascript' src='https://www.google.com/jsapi'></script>");
+		report.println("<script type='text/javascript'>");
+		report.println("google.load('visualization', '1.0', { 'packages': [ 'corechart' ] });");
+		report.println("google.setOnLoadCallback(drawChart);");
+		report.println("function drawChart() {");
+		report.println("var options = { 'title': '" + _method + "() latency', 'width':800, 'height':600 };");
+		report.println("var data = new google.visualization.DataTable();");
+		report.println("data.addColumn('string', 'Round #');");
+		for(final String library : latencyResults.get(0).keySet())
+		{
+			report.println("data.addColumn('number', '" + library + "');");
+		}
+		report.println("data.addRows([");
+		for(int round = 0; round < latencyResults.size(); round++)
+		{
+			final Map<String, Double> resultsForRound = latencyResults.get(round);
+			report.print("[ '" + round + "', ");
+			{
+				boolean first = true;
+				for(final String library : latencyResults.get(0).keySet())
+				{
+					if(!first) report.print(", ");
+					report.print(resultsForRound.get(library));
+					first = false;
+				}
+			}
+			report.print(" ]");
+			if(round < latencyResults.size() - 1) report.print(",");
+			report.println();
+		}
+		report.println("]);");
+		report.println("var chart = new google.visualization.LineChart(");
+		report.println("document.getElementById('" + _method + "-chart'));");
+		report.println("chart.draw(data, options); }");
+		report.println("</script>");
+		report.println("</body></html>");
+		report.close();
 	}
 }

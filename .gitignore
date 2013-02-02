@@ -20,3 +20,6 @@ tmp/**/*
 
 # Libraries
 *.jar
+
+# Test/benchmark output
+/benchmark*.html

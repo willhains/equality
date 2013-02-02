@@ -9,9 +9,9 @@ import org.junit.*;
  */
 public class EqualsBenchmark extends EqualityBenchmark
 {
-	public EqualsBenchmark(SomewhatTypicalPOJO[] pojos, Object[] objects)
+	public EqualsBenchmark(int roundNumber, SomewhatTypicalPOJO[] pojos, Object[] objects)
 	{
-		super(pojos, objects);
+		super("equals", roundNumber, pojos, objects);
 	}
 	
 	boolean equals;
@@ -30,6 +30,9 @@ public class EqualsBenchmark extends EqualityBenchmark
 		
 		// Prevent HotSpot from optimising away the loop
 		System.out.println(equals ? " " : "");
+		
+		// Add result to report
+		addLatencyResult(name, latency);
 	}
 	
 	@Test
