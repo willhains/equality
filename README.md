@@ -98,11 +98,11 @@ With Equality, you write less code, it's more readable, and more maintainable. A
 
 ## OK, but how about performance?
 
-It's fast.
+It's fast. Here are [some charts](http://twitter.com/willhains/status/298764277593018368/photo/1) that compare the latency of Equality with Apache Commons and Eclipse code generation.
 
 Equality's `Equals` class performs significantly faster than both Apache's `EqualsBuilder` and Eclipse's built-in code-generated methods. Equality's `HashCode` performance is almost identical to Apache's `HashCodeBuilder`. In all cases, Equality required less code to use.
 
-Benchmark tests are included in the source code. Just run the JUnit tests under the `benchmark` folder.
+Benchmark tests are included in the source code. They produce the charts linked above. Just run the JUnit tests under the `benchmark` folder.
 
 ## Development status
 
