@@ -20,7 +20,7 @@ public abstract class EqualityBenchmark
 	protected static final int SIZE = 1000;
 	
 	// Run benchmark 10 times to see the effect of HotSpot
-	private static final int REPETITIONS = 10000;
+	private static final int REPETITIONS = 500;
 	
 	// Generated test data shared across all subclasses
 	private static Object[][] parameters;
@@ -110,17 +110,23 @@ public abstract class EqualityBenchmark
 		
 		report.println("<html><head><title>Equality Benchmark Results</title></head><body>");
 		final String hostName = InetAddress.getLocalHost().getHostName();
-		report.println("<h1>Equality Benchmark Results &mdash; " + hostName + ", " + timestamp + "</h1>");
-		report.println("<h2>Comparative latency of <code>" + _method + "()</code></h2>");
+		report.println("<p>Equality Benchmark Results &mdash; " + hostName + ", " + timestamp + "</p>");
 		report.println("<div id='" + _method + "-chart'></div>");
 		report.println("<script type='text/javascript' src='https://www.google.com/jsapi'></script>");
 		report.println("<script type='text/javascript'>");
 		report.println("google.load('visualization', '1.0', { 'packages': [ 'corechart' ] });");
-		report.println("google.setOnLoadCallback(drawChart);");
-		report.println("function drawChart() {");
-		report.println("var options = { 'title': '" + _method + "() latency', 'width':800, 'height':600 };");
+		report.println("google.setOnLoadCallback(drawChart_" + _method + ");");
+		report.println("function drawChart_" + _method + "() {");
+		report.print("var options = { ");
+		report.print("'title': '" + _method + "() latency', ");
+		report.print("'width': 800, ");
+		report.print("'height': 600, ");
+		report.print("'vAxis': { 'title': 'Latency (ns)', 'logScale': true }, ");
+		report.print("'hAxis': { 'title': 'Iterations', 'gridlines': { 'count': 6 } }, ");
+		report.print("'pointSize': 1 ");
+		report.println("};");
 		report.println("var data = new google.visualization.DataTable();");
-		report.println("data.addColumn('string', 'Round #');");
+		report.println("data.addColumn('number', 'Round #');");
 		for(final String library : latencyResults.get(0).keySet())
 		{
 			report.println("data.addColumn('number', '" + library + "');");
@@ -129,7 +135,7 @@ public abstract class EqualityBenchmark
 		for(int round = 0; round < latencyResults.size(); round++)
 		{
 			final Map<String, Double> resultsForRound = latencyResults.get(round);
-			report.print("[ '" + round + "', ");
+			report.print("[ " + round + ", ");
 			{
 				boolean first = true;
 				for(final String library : latencyResults.get(0).keySet())
@@ -144,7 +150,7 @@ public abstract class EqualityBenchmark
 			report.println();
 		}
 		report.println("]);");
-		report.println("var chart = new google.visualization.LineChart(");
+		report.println("var chart = new google.visualization.ScatterChart(");
 		report.println("document.getElementById('" + _method + "-chart'));");
 		report.println("chart.draw(data, options); }");
 		report.println("</script>");
