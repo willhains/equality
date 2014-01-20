@@ -1,15 +1,20 @@
 package com.willhains.equality;
 
 import org.junit.*;
+import org.junit.experimental.categories.*;
 
 /**
  * Benchmark tests for {@link Equals}.
  * 
  * @author willhains
  */
+@Category(Runtime.class)
 public class EqualsBenchmark extends EqualityBenchmark
 {
-	public EqualsBenchmark(int roundNumber, SomewhatTypicalPOJO[] pojos, Object[] objects)
+	public EqualsBenchmark(
+		int roundNumber,
+		SomewhatTypicalPOJO[] pojos,
+		Object[] objects)
 	{
 		super("equals", roundNumber, pojos, objects);
 	}

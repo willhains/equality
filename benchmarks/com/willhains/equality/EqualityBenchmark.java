@@ -5,6 +5,7 @@ import java.net.*;
 import java.text.*;
 import java.util.*;
 import org.junit.*;
+import org.junit.experimental.categories.*;
 import org.junit.runner.*;
 import org.junit.runners.*;
 
@@ -13,6 +14,7 @@ import org.junit.runners.*;
  * 
  * @author willhains
  */
+@Category(Runtime.class)
 @RunWith(Parameterized.class)
 public abstract class EqualityBenchmark
 {
@@ -71,7 +73,11 @@ public abstract class EqualityBenchmark
 	protected final SomewhatTypicalPOJO[] _pojos;
 	protected final Object[] _objects;
 	
-	public EqualityBenchmark(String method, int roundNumber, SomewhatTypicalPOJO[] pojos, Object[] objects)
+	public EqualityBenchmark(
+		String method,
+		int roundNumber,
+		SomewhatTypicalPOJO[] pojos,
+		Object[] objects)
 	{
 		super();
 		_method = method;
@@ -89,7 +95,8 @@ public abstract class EqualityBenchmark
 	}
 	
 	// Latency results
-	private static final List<Map<String, Double>> latencyResults = new ArrayList<Map<String, Double>>();
+	private static final List<Map<String, Double>> latencyResults =
+		new ArrayList<Map<String, Double>>();
 	
 	/**
 	 * Add a result to the HTML report generated at the end of the test.
@@ -97,32 +104,44 @@ public abstract class EqualityBenchmark
 	protected final void addLatencyResult(String library, double latency)
 	{
 		final Map<String, Double> resultsForRound;
-		if(latencyResults.size() > _roundNumber) resultsForRound = latencyResults.get(_roundNumber);
-		else latencyResults.add(resultsForRound = new HashMap<String, Double>());
+		if(latencyResults.size() > _roundNumber) resultsForRound =
+			latencyResults.get(_roundNumber);
+		else latencyResults
+			.add(resultsForRound = new HashMap<String, Double>());
 		resultsForRound.put(library, latency);
 	}
 	
 	@AfterClass
 	public static void generateLatencyReport() throws IOException
 	{
-		final String timestamp = new SimpleDateFormat("yyyy-MM-dd..HH.mm").format(new Date());
-		final PrintStream report = new PrintStream("benchmark-" + _method + "-" + timestamp + ".html", "UTF-8");
+		final String timestamp =
+			new SimpleDateFormat("yyyy-MM-dd..HH.mm").format(new Date());
+		final PrintStream report =
+			new PrintStream(
+				"benchmark-" + _method + "-" + timestamp + ".html",
+				"UTF-8");
 		
-		report.println("<html><head><title>Equality Benchmark Results</title></head><body>");
+		report
+			.println("<html><head><title>Equality Benchmark Results</title></head><body>");
 		final String hostName = InetAddress.getLocalHost().getHostName();
-		report.println("<p>Equality Benchmark Results &mdash; " + hostName + ", " + timestamp + "</p>");
+		report.println("<p>Equality Benchmark Results &mdash; " + hostName
+			+ ", " + timestamp + "</p>");
 		report.println("<div id='" + _method + "-chart'></div>");
-		report.println("<script type='text/javascript' src='https://www.google.com/jsapi'></script>");
+		report
+			.println("<script type='text/javascript' src='https://www.google.com/jsapi'></script>");
 		report.println("<script type='text/javascript'>");
-		report.println("google.load('visualization', '1.0', { 'packages': [ 'corechart' ] });");
+		report
+			.println("google.load('visualization', '1.0', { 'packages': [ 'corechart' ] });");
 		report.println("google.setOnLoadCallback(drawChart_" + _method + ");");
 		report.println("function drawChart_" + _method + "() {");
 		report.print("var options = { ");
 		report.print("'title': '" + _method + "() latency', ");
 		report.print("'width': 800, ");
 		report.print("'height': 600, ");
-		report.print("'vAxis': { 'title': 'Latency (ns)', 'logScale': true }, ");
-		report.print("'hAxis': { 'title': 'Iterations', 'gridlines': { 'count': 6 } }, ");
+		report
+			.print("'vAxis': { 'title': 'Latency (ns)', 'logScale': true }, ");
+		report
+			.print("'hAxis': { 'title': 'Iterations', 'gridlines': { 'count': 6 } }, ");
 		report.print("'pointSize': 1 ");
 		report.println("};");
 		report.println("var data = new google.visualization.DataTable();");
@@ -134,7 +153,8 @@ public abstract class EqualityBenchmark
 		report.println("data.addRows([");
 		for(int round = 0; round < latencyResults.size(); round++)
 		{
-			final Map<String, Double> resultsForRound = latencyResults.get(round);
+			final Map<String, Double> resultsForRound =
+				latencyResults.get(round);
 			report.print("[ " + round + ", ");
 			{
 				boolean first = true;

@@ -2,15 +2,20 @@ package com.willhains.equality;
 
 import java.util.*;
 import org.junit.*;
+import org.junit.experimental.categories.*;
 
 /**
  * Benchmark tests for {@link HashCode}.
  * 
  * @author willhains
  */
+@Category(Runtime.class)
 public class HashCodeBenchmark extends EqualityBenchmark
 {
-	public HashCodeBenchmark(int roundNumber, SomewhatTypicalPOJO[] pojos, Object[] objects)
+	public HashCodeBenchmark(
+		int roundNumber,
+		SomewhatTypicalPOJO[] pojos,
+		Object[] objects)
 	{
 		super("hashCode", roundNumber, pojos, objects);
 	}
@@ -25,7 +30,8 @@ public class HashCodeBenchmark extends EqualityBenchmark
 	
 	private int _countCollisions()
 	{
-		final Map<Integer, SomewhatTypicalPOJO> hashes = new HashMap<Integer, SomewhatTypicalPOJO>();
+		final Map<Integer, SomewhatTypicalPOJO> hashes =
+			new HashMap<Integer, SomewhatTypicalPOJO>();
 		int collisions = 0;
 		for(int i = 0; i < SIZE; i++)
 		{
@@ -46,11 +52,14 @@ public class HashCodeBenchmark extends EqualityBenchmark
 	
 	private int[] _hashDistribution()
 	{
-		final long bucketSize = ((long)Integer.MAX_VALUE - (long)Integer.MIN_VALUE) / NUM_BUCKETS + 1L;
+		final long bucketSize =
+			((long)Integer.MAX_VALUE - (long)Integer.MIN_VALUE) / NUM_BUCKETS
+				+ 1L;
 		final int[] histogram = new int[NUM_BUCKETS];
 		for(int i = 0; i < SIZE; i++)
 		{
-			final long bucket = ((long)hashCodes[i] - (long)Integer.MIN_VALUE) / bucketSize;
+			final long bucket =
+				((long)hashCodes[i] - (long)Integer.MIN_VALUE) / bucketSize;
 			histogram[(int)bucket]++;
 		}
 		return histogram;
