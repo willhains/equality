@@ -4,26 +4,22 @@ An elegant API for implementing Java's `equals()` and `hashCode()` methods.
 
 ## How to use Equality
 
-```java
-@Override
-public boolean equals(Object obj)
-{
-    Equals<MyClass> eq = Equals.compare(this, obj);
-    return eq
-        .and(this.name,        eq.that.name)      // <-- eq.that is guaranteed to never be null
-        .and(this.productCode, eq.that.productCode)
-        .and(this.colour,      eq.that.colour)
-        .equals();
-}
+Just declare a private static constant `Equality`, with a list of accessors for
+the properties you want to participate in `equals()` and `hashCode()`.
 
-@Override
-public int hashCode()
+```java
+public final MyClass
 {
-    return HashCode.compute()
-        .with(this.name)
-        .with(this.productCode)
-        .with(this.colour)
-        .hashCode();
+	private String name;
+	private int productCode;
+	private Color color;
+	
+	private static final Equality<MyClass> EQ = Equality.ofProperties(
+		$ -> $.name,
+		$ -> $.productCode,
+		$ -> $.color);	
+	@Override public boolean equals(Object o) { return EQ.compare(this, o); }
+	@Override public int hashCode() { return EQ.hash(this); }
 }
 ```
 
@@ -31,7 +27,8 @@ public int hashCode()
 
 Because it's better.
 
-Compare the code above to the equivalent using `EqualsBuilder` and `HashCodeBuilder` in Apache Commons:
+Compare the code above to the equivalent using `EqualsBuilder` and
+`HashCodeBuilder` from Apache Commons:
 
 ```java
 @Override
@@ -94,17 +91,21 @@ public int hashCode()
 }
 ```
 
-With Equality, you write less code, it's more readable, and more maintainable. And there's nothing to memorise — if your IDE supports code completion (and, even better, dynamic display of Javadoc), you will be prompted what to do as you write the code.
-
-## OK, but how about performance?
-
-It's fast. Here are [some charts](http://twitter.com/willhains/status/298764277593018368/photo/1) that compare the latency of Equality with Apache Commons and Eclipse code generation.
-
-Equality's `Equals` class performs significantly faster than both Apache's `EqualsBuilder` and Eclipse's built-in code-generated methods. Equality's `HashCode` performance is almost identical to Apache's `HashCodeBuilder`. In all cases, Equality required less code to use.
-
-Benchmark tests are included in the source code. They produce the charts linked above. Just run the JUnit tests under the `benchmark` folder.
+With Equality, you write less code, it's more readable, and more maintainable.
+And there's nothing to memorise: if your IDE supports code completion (and, even
+better, dynamic display of Javadoc), you will be prompted what to do as you
+write the code.
 
 ## Development status
 
-Equality is currently in a beta state. Comments and contributions are welcome and encouraged. Public APIs are unlikely to change, but may do so without notice.
+Equality is currently in a beta state. Comments and contributions are welcome
+and encouraged. Public APIs are unlikely to change, but may do so without
+notice.
 
+## Contribution
+
+1. Fork
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create new Pull Request
