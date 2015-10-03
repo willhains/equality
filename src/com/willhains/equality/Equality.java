@@ -1,7 +1,6 @@
 package com.willhains.equality;
 
 import java.util.function.*;
-import javax.annotation.*;
 
 /**
  * A fast, safe, helpful utility for implementing {@link Object#equals} and
@@ -41,7 +40,7 @@ public interface Equality<T>
 	 * public boolean equals(Object other) { return EQ.compare(this, other); }
 	 * </pre>
 	 */
-	default boolean compare(T self, @Nullable Object other)
+	default boolean compare(T self, Object other)
 	{
 		if(other == self) return true;
 		if(other == null) return false;
@@ -49,8 +48,8 @@ public interface Equality<T>
 		final T that = (T)other;
 		for(Function<T, ?> property: properties())
 		{
-			final @Nullable Object thisValue = property.apply(self);
-			final @Nullable Object thatValue = property.apply(that);
+			final Object thisValue = property.apply(self);
+			final Object thatValue = property.apply(that);
 			final boolean equal = thisValue == null
 				? thatValue == null
 				: thisValue.equals(thatValue);
@@ -70,7 +69,7 @@ public interface Equality<T>
 		int hash = 17;
 		for(Function<T, ?> property: properties())
 		{
-			final @Nullable Object value = property.apply(self);
+			final Object value = property.apply(self);
 			final int propertyHash = value == null ? 7 : value.hashCode();
 			hash += 37 * propertyHash;
 		}
