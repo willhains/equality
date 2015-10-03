@@ -5,13 +5,17 @@ import javax.annotation.*;
 
 /**
  * A fast, safe, helpful utility for implementing {@link Object#equals} and
- * {@link Object#hashCode} easily and correctly.
+ * {@link Object#hashCode} easily and correctly. See {@link #ofProperties} for
+ * usage.
+ * 
+ * @param <T> your class.
  */
 public interface Equality<T>
 {
 	/**
 	 * Return an array of functions that each retrieve an internal property from
-	 * a given instance of {@code T}. See {@link #ofProperties} for usage.
+	 * a given instance of {@code T}. This method is used internally; you don't
+	 * have to implement it.
 	 */
 	Function<T, ?>[] properties();
 	
@@ -72,17 +76,4 @@ public interface Equality<T>
 		}
 		return hash;
 	}
-}
-
-final class Test
-{
-	String host;
-	int port;
-
-	private static final Equality<Test> EQ = Equality.ofProperties(
-		$ -> $.host,
-		$ -> $.port);
-
-	public boolean equals(Object other) { return EQ.compare(this, other); }
-	public int hashCode() { return EQ.hash(this); }
 }
