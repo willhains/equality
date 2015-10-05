@@ -1,4 +1,4 @@
-# Equality
+# Equality [![Build Status](https://travis-ci.org/willhains/equality.svg?branch=master)](https://travis-ci.org/willhains/equality)
 
 An elegant API for implementing Java's `equals()` and `hashCode()` methods.
 
