@@ -1,3 +1,14 @@
+# JDK
 language: java
 jdk:
-  - oraclejdk8
+- oraclejdk8
+
+# Release builds
+deploy:
+  provider: releases
+  api_key:
+    secure: WwS8ujD8Lpq1IOZ6Q2RkZkdTY/fMxgZTMV9K366SFmgGsY9nNkZUpt0Jbs29K9jTRsANXltKhgK1w65xaSVQTgTuvPpWFevZus/2Xbii3PafKVAVfiiIi4ln6UfzgFQa80qKvIHxXHB4CfYakWdJl/Zhp5yu5D8rqRX4mqK8sfPwSYTwrxJjBmq+sbaUzqqM5xVRJfBN3QN4lgSLt/kEO3IxjDcRr9W7sJfGUnrTpSn4q1zfMDIqmCa+3s3voR0XOqk36FqDZ8uvINNg4DIS/aLjD5xXOyEeFt2Kumh4Z6HKKLsCFKmHsGhInmvxm1ywBAL5wRvorduEtMs/RDRScBJbHstDRgwSJOYJO8w90ClO8raoteh6BM2vpFbEuhO8rLAfEWfUUH3Br6J4WWxy1RNRpFxT8NLrR2/wMrr1269skR4s4dSSml9y4vo7oWzvXajONSceFj5azpuR9rTDVaCFQRo9UFHksS+PWYjz3lLYrMFjpUDUc7M/9nzSSkcpw8qyEFh5vf1l2gZFQ/OmucIbEe5eOjOCj6nng68wrg63axGbAXBXc98rcP/tnsCDpGCpM3sCXQ119zmdS/aVViSWdmRmjlIiUaKNshVvejXK+OuwSsefWdWqrVRHW9jPLa97mOOVYzDqQYolgevyNEKi8O8kfRIe+ZdBfX/35yc=
+  file: target/equality-1.0.0.jar
+  on:
+    repo: willhains/equality
+    tags: true
