@@ -42,7 +42,7 @@ public interface Equality<T> extends Supplier<Function<T, ?>[]>
 		if(other == null) return false;
 		if(!self.getClass().equals(other.getClass())) return false;
 		final T that = (T)other;
-		for(final Function<T, ?> property : get())
+		for(final Function<T, ?> property: get())
 		{
 			final Object v1 = property.apply(self);
 			final Object v2 = property.apply(that);
@@ -53,15 +53,15 @@ public interface Equality<T> extends Supplier<Function<T, ?>[]>
 			}
 			if(v2 == null) return false;
 			if(v1.equals(v2)) continue;
-			if(v1 instanceof Object[] && Arrays.deepEquals((Object[])v1, (Object[])v2)) continue;
-			if(v1 instanceof int[] && Arrays.equals((int[])v1, (int[])v2)) continue;
-			if(v1 instanceof long[] && Arrays.equals((long[])v1, (long[])v2)) continue;
 			if(v1 instanceof boolean[] && Arrays.equals((boolean[])v1, (boolean[])v2)) continue;
-			if(v1 instanceof double[] && Arrays.equals((double[])v1, (double[])v2)) continue;
-			if(v1 instanceof float[] && Arrays.equals((float[])v1, (float[])v2)) continue;
-			if(v1 instanceof char[] && Arrays.equals((char[])v1, (char[])v2)) continue;
 			if(v1 instanceof byte[] && Arrays.equals((byte[])v1, (byte[])v2)) continue;
 			if(v1 instanceof short[] && Arrays.equals((short[])v1, (short[])v2)) continue;
+			if(v1 instanceof char[] && Arrays.equals((char[])v1, (char[])v2)) continue;
+			if(v1 instanceof int[] && Arrays.equals((int[])v1, (int[])v2)) continue;
+			if(v1 instanceof long[] && Arrays.equals((long[])v1, (long[])v2)) continue;
+			if(v1 instanceof float[] && Arrays.equals((float[])v1, (float[])v2)) continue;
+			if(v1 instanceof double[] && Arrays.equals((double[])v1, (double[])v2)) continue;
+			if(v1 instanceof Object[] && Arrays.deepEquals((Object[])v1, (Object[])v2)) continue;
 			return false;
 		}
 		return true;
@@ -78,7 +78,7 @@ public interface Equality<T> extends Supplier<Function<T, ?>[]>
 		// Modified form of Joshua Bloch's hash algorithm
 		int hash = 17;
 		hash += 13 * self.getClass().hashCode();
-		for(final Function<T, ?> property : get())
+		for(final Function<T, ?> property: get())
 		{
 			final Object value = property.apply(self);
 			final int propertyHash;
