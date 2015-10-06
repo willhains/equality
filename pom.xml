@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>equality</groupId>
   <artifactId>equality</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <name>Equality</name>
   <description>An elegant API for implementing Java's equals() and hashCode() methods</description>
   <build>
