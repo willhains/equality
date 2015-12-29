@@ -2,10 +2,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>equality</groupId>
   <artifactId>equality</artifactId>
-  <version>1.0.1</version>
+  <version>1.1.0</version>
   <name>Equality</name>
-  <description>An elegant API for implementing Java's equals() and hashCode() methods</description>
+  <description>An elegant API for implementing Java's equals(), hashCode(), and toString() methods</description>
+  <properties>
+    <finalName>${project.artifactId}-${project.version}</finalName>
+  </properties>
   <build>
+    <finalName>${finalName}</finalName>
     <sourceDirectory>src</sourceDirectory>
     <testSourceDirectory>test</testSourceDirectory>
     <testResources>

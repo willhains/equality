@@ -1,5 +1,6 @@
 package com.willhains.equality;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import java.math.*;
 import java.util.*;
@@ -31,6 +32,12 @@ public class EqualityTest
 		public int hashCode()
 		{
 			return EQ.hash(this);
+		}
+		
+		@Override
+		public String toString()
+		{
+			return EQ.format(this, "http://%s:%d");
 		}
 	}
 	
@@ -119,7 +126,7 @@ public class EqualityTest
 		double d =
 			6431210645340345940345879899912.47687684351264804646454384544d;
 		Object o =
-			"fioj alru83j oai392 foijhw4 0v902QUI jfio;ajo;zvjslkdfjg ;z";
+			"fioj alru83j oai392 foijhw4";
 			
 		boolean[] nn = new boolean[] {true, false};
 		byte[] bb = new byte[] {54, 111};
@@ -163,6 +170,12 @@ public class EqualityTest
 		public int hashCode()
 		{
 			return EQ.hash(this);
+		}
+		
+		@Override
+		public String toString()
+		{
+			return EQ.format(this);
 		}
 	}
 	
@@ -224,5 +237,31 @@ public class EqualityTest
 		b.nn = new boolean[] {false, true, false, false};
 		assertFalse(a.equals(b));
 		assertNotEquals(a.hashCode(), b.hashCode());
+	}
+	
+	@Test
+	public void shouldIncludeAllPropertiesInToString()
+	{
+		final MyClass a = new MyClass();
+		assertThat(a.toString(), containsString("false"));
+		assertThat(a.toString(), containsString("0"));
+		assertThat(a.toString(), containsString("&"));
+		assertThat(a.toString(), containsString("1684435131"));
+		assertThat(a.toString(), containsString("fioj alru83j oai392 foijhw4"));
+		assertThat(a.toString(), containsString("[true, false]"));
+		assertThat(a.toString(), containsString("[54, 111]"));
+		assertThat(a.toString(), containsString("[P, ^]"));
+		assertThat(a.toString(), containsString("[Hello, Bonjour]"));
+	}
+	
+	@Test
+	public void shouldHonourCustomFormatToString()
+	{
+		assertThat(new Address("oracle.com", 80).toString(), is(equalTo("http://oracle.com:80")));
+		assertThat(new Address("oracle.com", 25).toString(), is(equalTo("http://oracle.com:25")));
+		assertThat(new Address("apple.com", 80).toString(), is(equalTo("http://apple.com:80")));
+		assertThat(new Address("apple.com", 25).toString(), is(equalTo("http://apple.com:25")));
+		assertThat(new Address(null, 80).toString(), is(equalTo("http://null:80")));
+		assertThat(new Address(null, 25).toString(), is(equalTo("http://null:25")));
 	}
 }

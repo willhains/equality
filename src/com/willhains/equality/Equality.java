@@ -1,7 +1,9 @@
 package com.willhains.equality;
 
+import static java.util.stream.Collectors.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * A fast, safe, helpful utility for implementing {@link Object#equals} and
@@ -96,5 +98,51 @@ public interface Equality<T> extends Supplier<Function<T, ?>[]>
 			hash += 37 * propertyHash;
 		}
 		return hash;
+	}
+	
+	/**
+	 * Build a simple, pipe-delimited string representation for {@code self},
+	 * useful for {@link Object#toString()} implementations.
+	 * <pre>
+	 * public String toString() { return EQ.format(this); }
+	 * </pre>
+	 */
+	default String format(final T self)
+	{
+		final String string = Stream
+			.of(get())
+			.map($ -> $.apply(self))
+			.map(value ->
+			{
+				if(value == null) return "null";
+				else if(value instanceof Object[]) return Arrays.toString((Object[])value);
+				else if(value instanceof int[]) return Arrays.toString((int[])value);
+				else if(value instanceof long[]) return Arrays.toString((long[])value);
+				else if(value instanceof boolean[]) return Arrays.toString((boolean[])value);
+				else if(value instanceof double[]) return Arrays.toString((double[])value);
+				else if(value instanceof float[]) return Arrays.toString((float[])value);
+				else if(value instanceof char[]) return Arrays.toString((char[])value);
+				else if(value instanceof byte[]) return Arrays.toString((byte[])value);
+				else if(value instanceof short[]) return Arrays.toString((short[])value);
+				else return String.valueOf(value);
+			})
+			.collect(joining("|"));
+		return "[" + string + "]";
+	}
+	
+	/**
+	 * Build a formatted string representation for {@code self},
+	 * using the specified {@linkplain Formatter format string}.
+	 * <pre>
+	 * public String toString() { return EQ.format(this, "%s: %,d (%s)"); }
+	 * </pre>
+	 * Note: The properties of {@code self} will be applied to the format string
+	 * in the order they are given to {@link #ofProperties}.
+	 */
+	default String format(final T self, final String formatString)
+	{
+		return String.format(
+			formatString,
+			Stream.of(get()).map($ -> $.apply(self)).toArray(Object[]::new));
 	}
 }

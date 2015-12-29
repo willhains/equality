@@ -1,6 +1,6 @@
 # Equality [![Build Status](https://travis-ci.org/willhains/equality.svg?branch=master)](https://travis-ci.org/willhains/equality)
 
-An elegant API for implementing Java's `equals()` and `hashCode()` methods.
+An elegant API for implementing Java's `equals()`, `hashCode()`, and `toString()` methods.
 
 ## How to use Equality
 
@@ -8,7 +8,7 @@ Just declare a private static constant `Equality`, with a list of accessors for
 the properties you want to participate in `equals()` and `hashCode()`.
 
 ```java
-public final MyClass
+public class MyClass
 {
 	private String name;
 	private int productCode;
@@ -20,6 +20,7 @@ public final MyClass
 		$ -> $.color);	
 	@Override public boolean equals(Object o) { return EQ.compare(this, o); }
 	@Override public int hashCode() { return EQ.hash(this); }
+	@Override public String toString() { return EQ.format(this); }
 }
 ```
 
@@ -27,8 +28,8 @@ public final MyClass
 
 Because it's better.
 
-Compare the code above to the equivalent using `EqualsBuilder` and
-`HashCodeBuilder` from Apache Commons:
+Compare the code above to the equivalent using `EqualsBuilder`,
+`HashCodeBuilder`, and `ToStringBuilder` from Apache Commons:
 
 ```java
 @Override
@@ -52,6 +53,16 @@ public int hashCode()
         .append(this.productCode)
         .append(this.colour)
         .toHashCode();
+}
+
+@Overrid
+public String toString()
+{
+    return new ToStringBuilder(this)
+        .append("name", this.name)
+        .append("productCode", this.productCode)
+        .append("colour", this.colour)
+        .toString();
 }
 ```
 
@@ -88,6 +99,12 @@ public int hashCode()
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     result = prime * result + (int)(productCode ^ (productCode >>> 32));
     return result;
+}
+	
+@Override
+public String toString()
+{
+    return "MyClass [name=" + name + ", productCode=" + productCode + ", color=" + color + "]";
 }
 ```
 
