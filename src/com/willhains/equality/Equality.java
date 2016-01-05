@@ -1,6 +1,7 @@
 package com.willhains.equality;
 
 import static java.util.stream.Collectors.*;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -46,6 +47,39 @@ public final class Equality<T>
 	public static <T> Equality<T> ofProperties(final Function<T, ?> property)
 	{
 		final Function<T, ?>[] properties = new Function[] {property};
+		return ofProperties(properties);
+	}
+	
+	/**
+	 * Reflection-based alternative to {@link #ofProperties}.
+	 * Using this method has the advantage that new properties added to your
+	 * class later will be automatically included, and the disadvantage that
+	 * performance may be slower due to reflection overhead.
+	 * <pre>
+	 * private static final Equality&lt;MyClass&gt; EQ = Equality.reflect(MyClass.class);
+	 * </pre>
+	 * 
+	 * @see #ofProperties(Function...)
+	 */
+	public static <T> Equality<T> reflect(final Class<T> type)
+	{
+		final Function<Field, Function<T, ?>> fieldToPropertyAccessor = field -> instance ->
+		{
+			try
+			{
+				return field.get(instance);
+			}
+			catch(final IllegalAccessException e)
+			{
+				// No choice but to convert to runtime exception
+				throw new RuntimeException(e);
+			}
+		};
+		final Function<T, ?>[] properties = Arrays
+			.stream(type.getDeclaredFields())
+			.filter(field -> !Modifier.isStatic(field.getModifiers()))
+			.map(fieldToPropertyAccessor)
+			.toArray(Function[]::new);
 		return ofProperties(properties);
 	}
 	

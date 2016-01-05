@@ -170,26 +170,8 @@ public class EqualityTest
 			49815654.0909090909d};
 		Object[] oo = new Object[] {"Hello", "Bonjour"};
 		
-		private static final Equality<MyClass> EQ = Equality.ofProperties(
-			$ -> $.n,
-			$ -> $.b,
-			$ -> $.s,
-			$ -> $.c,
-			$ -> $.i,
-			$ -> $.l,
-			$ -> $.f,
-			$ -> $.d,
-			$ -> $.o,
-			$ -> $.nn,
-			$ -> $.bb,
-			$ -> $.ss,
-			$ -> $.cc,
-			$ -> $.ii,
-			$ -> $.ll,
-			$ -> $.ff,
-			$ -> $.dd,
-			$ -> $.oo);
-			
+		private static final Equality<MyClass> EQ = Equality.reflect(MyClass.class);
+		
 		@Override
 		public boolean equals(final Object obj)
 		{
