@@ -24,6 +24,12 @@ public class MyClass
 }
 ```
 
+There is also an even shorter way to create the `Equality` constant, if you don't mind reflection:
+
+```java
+private static final Equality<MyClass> EQ = Equality.reflect(MyClass.class);
+```
+
 ## Why another `equals()` and `hashCode()` utility?
 
 Because it's better.
