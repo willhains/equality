@@ -8,14 +8,44 @@ import org.junit.*;
 
 public class EqualityTest
 {
+	static final class Host
+	{
+		private final String _name;
+		
+		Host(final String name)
+		{
+			_name = name;
+		}
+		
+		private static final Equality<Host> EQ = Equality.ofProperties($ -> $._name);
+		
+		@Override
+		public boolean equals(final Object o)
+		{
+			return EQ.compare(this, o);
+		}
+		
+		@Override
+		public int hashCode()
+		{
+			return EQ.hash(this);
+		}
+		
+		@Override
+		public String toString()
+		{
+			return _name;
+		}
+	}
+	
 	static final class Address
 	{
-		private final String _host;
+		private final Host _host;
 		private final int _port;
 		
 		Address(final String host, final int port)
 		{
-			_host = host;
+			_host = new Host(host);
 			_port = port;
 		}
 		

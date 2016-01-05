@@ -9,12 +9,22 @@ import java.util.stream.*;
  * A fast, safe, helpful utility for implementing {@link Object#equals} and
  * {@link Object#hashCode} easily and correctly. See {@link #ofProperties} for
  * usage.
+ * <p>
+ * Note: {@link #equals}, {@link #hashCode}, and {@link toString} all throw
+ * {@link UnsupportedOperationException}, to avoid accidental incorrect usage.
  * 
  * @param <T> your class.
  * @author willhains
  */
-public interface Equality<T> extends Supplier<Function<T, ?>[]>
+public final class Equality<T>
 {
+	private final Function<T, ?>[] _properties;
+	
+	private Equality(final Function<T, ?>[] properties)
+	{
+		_properties = properties;
+	}
+	
 	/**
 	 * Create an {@link Equality} instance for your class, by supplying an array
 	 * of functions for retrieving the values of significant instance variables.
@@ -27,9 +37,16 @@ public interface Equality<T> extends Supplier<Function<T, ?>[]>
 	 * {@link Object#equals} and {@link Object#hashCode} implementations.
 	 */
 	@SafeVarargs
-	static <T> Equality<T> ofProperties(final Function<T, ?>... properties)
+	public static <T> Equality<T> ofProperties(final Function<T, ?>... properties)
 	{
-		return () -> properties;
+		return new Equality<>(properties);
+	}
+	
+	/** @see #ofProperties(Function...) */
+	public static <T> Equality<T> ofProperties(final Function<T, ?> property)
+	{
+		final Function<T, ?>[] properties = new Function[] {property};
+		return ofProperties(properties);
 	}
 	
 	/**
@@ -38,13 +55,13 @@ public interface Equality<T> extends Supplier<Function<T, ?>[]>
 	 * public boolean equals(Object other) { return EQ.compare(this, other); }
 	 * </pre>
 	 */
-	default boolean compare(final T self, final Object other)
+	public boolean compare(final T self, final Object other)
 	{
 		if(other == self) return true;
 		if(other == null) return false;
 		if(!self.getClass().equals(other.getClass())) return false;
 		final T that = (T)other;
-		for(final Function<T, ?> property: get())
+		for(final Function<T, ?> property : _properties)
 		{
 			final Object v1 = property.apply(self);
 			final Object v2 = property.apply(that);
@@ -75,12 +92,12 @@ public interface Equality<T> extends Supplier<Function<T, ?>[]>
 	 * public int hashCode() { return EQ.hash(this); }
 	 * </pre>
 	 */
-	default int hash(final T self)
+	public int hash(final T self)
 	{
 		// Modified form of Joshua Bloch's hash algorithm
 		int hash = 17;
 		hash += 13 * self.getClass().hashCode();
-		for(final Function<T, ?> property: get())
+		for(final Function<T, ?> property : _properties)
 		{
 			final Object value = property.apply(self);
 			final int propertyHash;
@@ -107,10 +124,10 @@ public interface Equality<T> extends Supplier<Function<T, ?>[]>
 	 * public String toString() { return EQ.format(this); }
 	 * </pre>
 	 */
-	default String format(final T self)
+	public String format(final T self)
 	{
 		final String string = Stream
-			.of(get())
+			.of(_properties)
 			.map($ -> $.apply(self))
 			.map(value ->
 			{
@@ -139,10 +156,50 @@ public interface Equality<T> extends Supplier<Function<T, ?>[]>
 	 * Note: The properties of {@code self} will be applied to the format string
 	 * in the order they are given to {@link #ofProperties}.
 	 */
-	default String format(final T self, final String formatString)
+	public String format(final T self, final String formatString)
 	{
 		return String.format(
 			formatString,
-			Stream.of(get()).map($ -> $.apply(self)).toArray(Object[]::new));
+			Stream.of(_properties).map($ -> $.apply(self)).toArray(Object[]::new));
+	}
+	
+	/**
+	 * Do not use this method; call {@link #hash(Object) hash(this)} instead!
+	 * 
+	 * @throws UnsupportedOperationException always.
+	 * @see #hash(Object)
+	 */
+	@Override
+	public int hashCode()
+	{
+		throw new UnsupportedOperationException("Use hash(this) to compute your hash code");
+	}
+	
+	/**
+	 * Do not use this method; call {@link #compare(Object, Object)
+	 * compare(this, other)} instead!
+	 * 
+	 * @throws UnsupportedOperationException always
+	 * @see #compare(Object, Object)
+	 */
+	@Override
+	public boolean equals(final Object obj)
+	{
+		throw new UnsupportedOperationException("Use compare(this, other) to test for equality");
+	}
+	
+	/**
+	 * Do not use this method; call {@link #format(Object) format(this)} or
+	 * {@link #format(Object, String) format(this, "format string"}
+	 * instead!
+	 * 
+	 * @throws UnsupportedOperationException always
+	 * @see #format(Object)
+	 * @see #format(Object, String)
+	 */
+	@Override
+	public String toString()
+	{
+		throw new UnsupportedOperationException("Use format(this) to build your string");
 	}
 }
