@@ -11,7 +11,7 @@ import java.util.stream.*;
  * {@link Object#hashCode} easily and correctly. See {@link #ofProperties} for
  * usage.
  * <p>
- * Note: {@link #equals}, {@link #hashCode}, and {@link toString} all throw
+ * Note: {@link #equals}, {@link #hashCode}, and {@link #toString} all throw
  * {@link UnsupportedOperationException}, to avoid accidental incorrect usage.
  * 
  * @param <T> your class.
@@ -160,8 +160,7 @@ public final class Equality<T>
 	 */
 	public String format(final T self)
 	{
-		final String string = Stream
-			.of(_properties)
+		return Stream.of(_properties)
 			.map($ -> $.apply(self))
 			.map(value ->
 			{
@@ -178,7 +177,6 @@ public final class Equality<T>
 				else return String.valueOf(value);
 			})
 			.collect(joining("|"));
-		return "[" + string + "]";
 	}
 	
 	/**
