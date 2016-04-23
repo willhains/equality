@@ -99,12 +99,8 @@ public final class Equality<T>
 		{
 			final Object v1 = property.apply(self);
 			final Object v2 = property.apply(that);
-			if(v1 == null)
-			{
-				if(v2 == null) continue;
-				return false;
-			}
-			if(v2 == null) return false;
+			if(v1 == v2) continue;
+			if(v1 == null || v2 == null) return false;
 			if(v1.equals(v2)) continue;
 			if(v1 instanceof boolean[] && Arrays.equals((boolean[])v1, (boolean[])v2)) continue;
 			if(v1 instanceof byte[] && Arrays.equals((byte[])v1, (byte[])v2)) continue;
