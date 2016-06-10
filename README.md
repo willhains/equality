@@ -39,9 +39,11 @@ And there's nothing to memorise: if your IDE supports code completion (and, even
 better, dynamic display of Javadoc), you will be prompted what to do as you
 write the code.
 
-## Development status
+## Development Status
 
-Equality is currently in a beta state. Comments and contributions are welcome
+Equality is production-ready, and is already used in mission-critical systems
+of a large financial institution. (No guarantees of safety or quality are made
+or implied. Use at your own risk.) Comments and contributions are welcome
 and encouraged. Public APIs are unlikely to change, but may do so without
 notice.
 
