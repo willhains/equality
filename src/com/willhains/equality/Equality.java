@@ -132,6 +132,7 @@ public final class Equality<T>
 			final Object value = property.apply(self);
 			final int propertyHash;
 			if(value == null) propertyHash = 7;
+			else if(value instanceof String) propertyHash = value.hashCode();
 			else if(value instanceof Object[]) propertyHash = Arrays.deepHashCode((Object[])value);
 			else if(value instanceof int[]) propertyHash = Arrays.hashCode((int[])value);
 			else if(value instanceof long[]) propertyHash = Arrays.hashCode((long[])value);
@@ -156,7 +157,8 @@ public final class Equality<T>
 	 */
 	public String format(final T self)
 	{
-		return Stream.of(_properties)
+		return Stream
+			.of(_properties)
 			.map($ -> $.apply(self))
 			.map(value ->
 			{
