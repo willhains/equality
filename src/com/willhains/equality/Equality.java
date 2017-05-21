@@ -142,7 +142,7 @@ public final class Equality<T>
 			else if(value instanceof byte[]) propertyHash = Arrays.hashCode((byte[])value);
 			else if(value instanceof short[]) propertyHash = Arrays.hashCode((short[])value);
 			else propertyHash = value.hashCode();
-			hash += 37 * propertyHash;
+			hash = 37 * hash + propertyHash;
 		}
 		return hash;
 	}
