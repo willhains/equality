@@ -44,10 +44,10 @@ public final class Equality<T>
 	}
 	
 	/** @see #ofProperties(Function...) */
+	@SuppressWarnings("unchecked")
 	public static <T> Equality<T> ofProperties(final Function<T, ?> property)
 	{
-		final Function<T, ?>[] properties = new Function[] {property};
-		return ofProperties(properties);
+		return ofProperties(new Function[] {property});
 	}
 	
 	/**
@@ -75,7 +75,7 @@ public final class Equality<T>
 				throw new RuntimeException(e);
 			}
 		};
-		final Function<T, ?>[] properties = Arrays
+		@SuppressWarnings("unchecked") final Function<T, ?>[] properties = Arrays
 			.stream(type.getDeclaredFields())
 			.filter(field -> !Modifier.isStatic(field.getModifiers()))
 			.map(fieldToPropertyAccessor)
@@ -94,7 +94,7 @@ public final class Equality<T>
 		if(other == self) return true;
 		if(other == null) return false;
 		if(!self.getClass().equals(other.getClass())) return false;
-		final T that = (T)other;
+		@SuppressWarnings("unchecked") final T that = (T)other;
 		for(final Function<T, ?> property : _properties)
 		{
 			final Object v1 = property.apply(self);
