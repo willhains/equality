@@ -132,21 +132,18 @@ public final class Equality<T>
 			final Object value = property.apply(self);
 			final int propertyHash;
 			if(value == null) propertyHash = 7;
-			else if(value instanceof String) propertyHash = value.hashCode();
-			else if(value instanceof Number) propertyHash = value.hashCode();
-			else if(value instanceof Boolean) propertyHash = value.hashCode();
-			else if(value instanceof Enum) propertyHash = value.hashCode();
-			else if(value instanceof Collection) propertyHash = value.hashCode();
-			else if(value instanceof Map) propertyHash = value.hashCode();
-			else if(value instanceof Object[]) propertyHash = Arrays.deepHashCode((Object[])value);
-			else if(value instanceof int[]) propertyHash = Arrays.hashCode((int[])value);
-			else if(value instanceof long[]) propertyHash = Arrays.hashCode((long[])value);
-			else if(value instanceof boolean[]) propertyHash = Arrays.hashCode((boolean[])value);
-			else if(value instanceof double[]) propertyHash = Arrays.hashCode((double[])value);
-			else if(value instanceof float[]) propertyHash = Arrays.hashCode((float[])value);
-			else if(value instanceof char[]) propertyHash = Arrays.hashCode((char[])value);
-			else if(value instanceof byte[]) propertyHash = Arrays.hashCode((byte[])value);
-			else if(value instanceof short[]) propertyHash = Arrays.hashCode((short[])value);
+			else if(value.getClass().isArray())
+			{
+				if(value instanceof Object[]) propertyHash = Arrays.deepHashCode((Object[])value);
+				else if(value instanceof int[]) propertyHash = Arrays.hashCode((int[])value);
+				else if(value instanceof long[]) propertyHash = Arrays.hashCode((long[])value);
+				else if(value instanceof double[]) propertyHash = Arrays.hashCode((double[])value);
+				else if(value instanceof float[]) propertyHash = Arrays.hashCode((float[])value);
+				else if(value instanceof char[]) propertyHash = Arrays.hashCode((char[])value);
+				else if(value instanceof byte[]) propertyHash = Arrays.hashCode((byte[])value);
+				else if(value instanceof short[]) propertyHash = Arrays.hashCode((short[])value);
+				else propertyHash = Arrays.hashCode((boolean[])value);
+			}
 			else propertyHash = value.hashCode();
 			hash = 37 * hash + propertyHash;
 		}
