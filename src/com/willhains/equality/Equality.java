@@ -250,7 +250,6 @@ public abstract class Equality<T>
 		{
 			// Modified form of Joshua Bloch's hash algorithm
 			int hash = 17;
-			hash += self.getClass().hashCode();
 			for(final Function<T, ?> prop : _properties)
 			{
 				hash = 37 * hash + _hash(self, prop);
